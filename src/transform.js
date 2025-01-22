@@ -1,6 +1,4 @@
-import { Preprocessor } from 'content-tag';
-
-let p = new Preprocessor();
+import { parse } from './parse.js';
 
 /**
  * @param {string} source
@@ -15,7 +13,7 @@ export function transform(source, callback) {
   let originalSource = source;
   let buffer = Buffer.from(originalSource, 'utf8');
 
-  let templates = p.parse(source);
+  let templates = parse(source);
 
   for (let parsed of templates) {
     let transformed = callback(parsed.contents)

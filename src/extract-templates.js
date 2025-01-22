@@ -1,13 +1,11 @@
-import { Preprocessor } from 'content-tag';
 import { coordinatesOf } from './coordinates-of.js';
-
-const p = new Preprocessor();
+import { parse } from './parse.js';
 
 /**
  * @param {string} source
  */
 export function extractTemplates(source) {
-  let parsed = p.parse(source, { inline_source_map: false });
+  let parsed = parse(source);
 
   if (parsed.length === 0) {
     return [];

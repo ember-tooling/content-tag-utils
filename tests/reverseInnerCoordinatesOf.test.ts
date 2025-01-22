@@ -4,17 +4,16 @@ import { extractTemplates, reverseInnerCoordinates } from "content-tag-utils";
 describe('reverseInnerCoordinates', () => {
   it('transforms the coordinates', () => {
     let js = '<template>{{book}}</template>';
-
-    // Return value of buildRules + transform
+    //                    ^ Error here. This isn't defined
+    // Example -- pointing at ^ range made by the node representing `book` 
     const lintResult = {
       column: 2,
       endColumn: 6,
       endLine: 1,
       line: 1,
-      // not needed: rule, message, filePath, severity, source
     };
     const templateInfos = extractTemplates(js);
-    const result = reverseInnerCoordinates(templateInfos[0], lintResult);
+    const result = reverseInnerCoordinates(templateInfos[0]!, lintResult);
 
     expect(result.line).toBe(1);
     expect(result.endLine).toBe(1);
