@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lints:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: wyvox/action@1
+    - run: pnpm lint
+    - run: pnpm format
+    - uses: wyvox/action-no-git-diff@v1
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: wyvox/action@1
+    - run: pnpm test
