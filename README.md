@@ -17,6 +17,16 @@ Aimed at sharing logic between:
 npm add content-tag-utils
 ```
 
+Using from source / github, via package.json:
+
+```js
+{
+    "dependencies": {
+        "content-tag-utils": "github:NullVoxPopuli/content-tag-utils"
+    }
+}
+```
+
 ## Usage
 
 ```js
