@@ -1,13 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import { coordinatesOf } from "content-tag-utils";
-import { Preprocessor } from 'content-tag';
+import { Preprocessor } from "content-tag";
 
 const p = new Preprocessor();
 
-describe('coordinatesOf', function() {
-
-
-  it('gives me the value for the README', () => {
+describe("coordinatesOf", function () {
+  it("gives me the value for the README", () => {
     let file = `
 export const Foo = <template>
     Hello there
@@ -24,12 +22,10 @@ export const Foo = <template>
         "start": 30,
       }
     `);
-
   });
 
-
-  it('makes sense for one line components', function() {
-    let js = '<template>{{book}}</template>';
+  it("makes sense for one line components", function () {
+    let js = "<template>{{book}}</template>";
 
     const parsed = p.parse(js);
     const result = coordinatesOf(js, parsed[0]);
@@ -47,17 +43,17 @@ export const Foo = <template>
     `);
   });
 
-  it('should contain only valid rule configuration', function() {
+  it("should contain only valid rule configuration", function () {
     let typescript =
       /* 1 */ `import Component from '@glimmer/component';\n` +
-      /* 2 */ '\n' +
-      /* 3 */ 'interface Args {}\n' +
-      /* 4 */ '\n' +
-      /* 5 */ 'export class SomeComponent extends Component<Args> {\n' +
-      /* 6 */ '  <template>\n' +
-      /* 7 */ '    {{debugger}}\n' +
-      /* 8 */ '  </template>\n' +
-      /* 9 */ '}\n';
+      /* 2 */ "\n" +
+      /* 3 */ "interface Args {}\n" +
+      /* 4 */ "\n" +
+      /* 5 */ "export class SomeComponent extends Component<Args> {\n" +
+      /* 6 */ "  <template>\n" +
+      /* 7 */ "    {{debugger}}\n" +
+      /* 8 */ "  </template>\n" +
+      /* 9 */ "}\n";
 
     const parsed = p.parse(typescript);
     const result = coordinatesOf(typescript, parsed[0]);
@@ -76,7 +72,7 @@ export const Foo = <template>
     `);
   });
 
-  it('has correct templateInfos when in a function', function() {
+  it("has correct templateInfos when in a function", function () {
     const multiTemplateScript = [
       /* 1 */ `export function foo() {`,
       /* 2 */ `  const bar = 2;`,
@@ -86,10 +82,11 @@ export const Foo = <template>
       /* 6 */ `  </template>`,
       /* 7 */ `}`,
       /* 8 */ ``,
-    ].join('\n');
+    ].join("\n");
     const parsed = p.parse(multiTemplateScript);
 
-    expect(coordinatesOf(multiTemplateScript, parsed[0])).toMatchInlineSnapshot(`
+    expect(coordinatesOf(multiTemplateScript, parsed[0]))
+      .toMatchInlineSnapshot(`
       {
         "column": 19,
         "columnOffset": 2,
@@ -100,7 +97,7 @@ export const Foo = <template>
     `);
   });
 
-  it('has correct templateInfos with multiple templates', function() {
+  it("has correct templateInfos with multiple templates", function () {
     const multiTemplateScript = [
       /* 1 */ `import type { TOC } from '@ember/component/template-only'`,
       /* 2 */ ``,
@@ -111,10 +108,11 @@ export const Foo = <template>
       /* 7 */ `  {{yield}}`,
       /* 8 */ `</template> satisfies TOC<{ Blocks: { default: [] }}>`,
       /* 9 */ ``,
-    ].join('\n');
+    ].join("\n");
     const parsed = p.parse(multiTemplateScript);
 
-    expect(coordinatesOf(multiTemplateScript, parsed[0])).toMatchInlineSnapshot(`
+    expect(coordinatesOf(multiTemplateScript, parsed[0]))
+      .toMatchInlineSnapshot(`
       {
         "column": 27,
         "columnOffset": 0,
@@ -123,7 +121,8 @@ export const Foo = <template>
         "start": 86,
       }
     `);
-    expect(coordinatesOf(multiTemplateScript, parsed[1])).toMatchInlineSnapshot(`
+    expect(coordinatesOf(multiTemplateScript, parsed[1]))
+      .toMatchInlineSnapshot(`
       {
         "column": 27,
         "columnOffset": 0,
@@ -132,7 +131,8 @@ export const Foo = <template>
         "start": 127,
       }
     `);
-    expect(coordinatesOf(multiTemplateScript, parsed[2])).toMatchInlineSnapshot(`
+    expect(coordinatesOf(multiTemplateScript, parsed[2]))
+      .toMatchInlineSnapshot(`
       {
         "column": 27,
         "columnOffset": 0,
@@ -143,19 +143,19 @@ export const Foo = <template>
     `);
   });
 
-  it('should contain only valid rule configuration', function() {
+  it("should contain only valid rule configuration", function () {
     let typescript =
       /* 1  */ `import type { TOC } from '@ember/component/template-only';\n` +
-      /* 2  */ '\n' +
-      /* 3  */ 'interface Args {}\n' +
-      /* 4  */ '\n' +
-      /* 5  */ 'export const myComponent =\n' +
-      /* 6  */ '  <template>\n' +
-      /* 7  */ '    {{yield}}\n' +
-      /* 8  */ '  </template> satisfies TOC<{\n' +
-      /* 9  */ '    Blocks: { default: []; };\n' +
-      /* 10 */ '  }>\n' +
-      /* 11 */ '\n';
+      /* 2  */ "\n" +
+      /* 3  */ "interface Args {}\n" +
+      /* 4  */ "\n" +
+      /* 5  */ "export const myComponent =\n" +
+      /* 6  */ "  <template>\n" +
+      /* 7  */ "    {{yield}}\n" +
+      /* 8  */ "  </template> satisfies TOC<{\n" +
+      /* 9  */ "    Blocks: { default: []; };\n" +
+      /* 10 */ "  }>\n" +
+      /* 11 */ "\n";
 
     const parsed = p.parse(typescript);
     const result = coordinatesOf(typescript, parsed[0]);
@@ -173,4 +173,3 @@ export const Foo = <template>
     `);
   });
 });
-

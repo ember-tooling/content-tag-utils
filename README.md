@@ -3,14 +3,13 @@
 Utilities for writing tools that work with [content-tag](https://github.com/embroider-build/content-tag) and converting bytes-indexes to character-indexes.
 
 Aimed at sharing logic between:
+
 - [eslint](https://eslint.org/) w/ [ember-eslint-parser](https://github.com/ember-tooling/ember-eslint-parser)
 - [prettier](https://github.com/prettier/prettier) w/ [prettier-plugin-ember-template-tag](https://github.com/ember-tooling/prettier-plugin-ember-template-tag)
 - [ember-template-lint](https://github.com/ember-template-lint/ember-template-lint)
 
-
 > [!NOTE]  
 > This utility is meant for local tooling and not the browser, or transforming runtime code. No sourcemaps are involved. (Sourcemaps should be used when transforming code meant for runtime).
-
 
 ## Install
 
@@ -22,11 +21,11 @@ npm add content-tag-utils
 
 ```js
 import {
-    transform,
-    extractTemplates,
-    replaceTemplates,
-    coordinatesOf,
-    reverseInnerCoordinates,
+  transform,
+  extractTemplates,
+  replaceTemplates,
+  coordinatesOf,
+  reverseInnerCoordinates,
 } from "content-tag-utils";
 ```
 
@@ -34,10 +33,10 @@ import {
 
 Transforms each template within a gjs or gts file in one go.
 
-This is a convenience function that combines `extractTemplates`, `coordinatesOf`, and `replaceTemplates`
+This is a convenience function that combines `extractTemplates` and `replaceTemplates`
 
 ```js
-import { transform } from 'content-tag-utils';
+import { transform } from "content-tag-utils";
 
 let file = `
 export const Foo = <template>
@@ -47,7 +46,9 @@ export const Foo = <template>
 
 let result = transform(file, (contents) => `${contents}!`);
 ```
+
 result ( a ! character is added right before the closing </template>):
+
 ```gjs
 export const Foo = <template>
     Hello there
@@ -59,7 +60,7 @@ export const Foo = <template>
 Parses a given gjs / gts file and returns an object with character-indexes, the contents of each template, and the context in which that template was found (which is useful for reversing the coordinates of the inner content).
 
 ```js
-import { extractTemplates } from 'content-tag-utils';
+import { extractTemplates } from "content-tag-utils";
 
 let file = `
 export const Foo = <template>
@@ -69,7 +70,9 @@ export const Foo = <template>
 
 let result = extractTemplates(file);
 ```
+
 result:
+
 ```gjs
 [
     {
@@ -88,13 +91,14 @@ result:
 
 ### replaceTemplates
 
-### coordinatesOf
-
-For a given source document (gjs or gts), and a single parseResult (one of the entries from the array returned from content-tag's parse), what is the line/column number of the first character for that parseResult, and the columnOffset (useful for extracting templates to do work on and then put back, or giving pointers to errors present in the template).
+Given a set of templates, the source, and a transform function, return a new string representing what the the source should become.
+This is split from the `transform` function for helping optimize how frequently a full parse on the source document is needed.
 
 ```js
-import { coordinatesOf } from 'content-tag-utils';
-import { Preprocessor } from 'content/-tag'
+import { replaceTemplates } from "content-tag-utils";
+import { Preprocessor } from "content-tag";
+
+let p = new Preprocessor();
 
 let file = `
 export const Foo = <template>
@@ -102,9 +106,37 @@ export const Foo = <template>
 </template>
 `;
 
-let result = coordinatesOf(file);
+let parsed = p.parse(file);
+
+let result = replaceTemplates(file, parsed, (contents) => {
+  /* transform here */
+  return contents;
+});
 ```
+
+### coordinatesOf
+
+For a given source document (gjs or gts), and a single parseResult (one of the entries from the array returned from content-tag's parse), what is the line/column number of the first character for that parseResult, and the columnOffset (useful for extracting templates to do work on and then put back, or giving pointers to errors present in the template).
+
+```js
+import { coordinatesOf } from "content-tag-utils";
+import { Preprocessor } from "content-tag";
+
+let p = new Preprocessor();
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+
+let parsed = p.parse(file);
+
+let result = coordinatesOf(file, parsed[0]);
+```
+
 result (all values are character-indexes):
+
 ```gjs
 {
     line: 2,
@@ -116,11 +148,9 @@ result (all values are character-indexes):
 }
 ```
 
-
 ### reverseInnerCoordinates
 
 Given inner coordinates scoped to a template, this function returns the coordinates in the overall source file.
-
 
 ```js
 import { reverseInnerCoordinates } from 'content-tag-utils';
@@ -143,7 +173,9 @@ let innerCoordinates = {
 const templateInfos = extractTemplates(file);
 const result = reverseInnerCoordinates(templateInfos[0]!, innerCoordinates);
 ```
+
 result:
+
 ```gjs
 {
     column: 4,

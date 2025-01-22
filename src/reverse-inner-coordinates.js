@@ -1,7 +1,6 @@
-
 /**
- * @param {import('./internal-types.ts').TemplateCoordinates} templateCoordinates 
- * @param {import('./internal-types.ts').InnerCoordinates} innerCoordinates 
+ * @param {import('./internal-types.ts').TemplateCoordinates} templateCoordinates
+ * @param {import('./internal-types.ts').InnerCoordinates} innerCoordinates
  */
 export function reverseInnerCoordinates(templateCoordinates, innerCoordinates) {
   /**
@@ -42,8 +41,14 @@ export function reverseInnerCoordinates(templateCoordinates, innerCoordinates) {
    *
    * Any result > line 1 will not require any column correction.
    */
-  const column = innerCoordinates.line === 1 ? innerCoordinates.column + templateCoordinates.column : innerCoordinates.column;
-  const endColumn = innerCoordinates.line === 1 ? innerCoordinates.endColumn + templateCoordinates.column : innerCoordinates.endColumn;
+  const column =
+    innerCoordinates.line === 1
+      ? innerCoordinates.column + templateCoordinates.column
+      : innerCoordinates.column;
+  const endColumn =
+    innerCoordinates.line === 1
+      ? innerCoordinates.endColumn + templateCoordinates.column
+      : innerCoordinates.endColumn;
 
   return {
     line,

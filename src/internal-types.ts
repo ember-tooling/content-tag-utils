@@ -12,7 +12,7 @@ export interface ContentRangeResult {
      * The end byte index of the content-range
      */
     end: number;
-  }
+  };
 }
 
 /**
@@ -54,5 +54,5 @@ export interface TemplateInfo {
   start: number;
   end: number;
 
-  contentRange: ContentRangeResult['contentRange'];
+  contentRange: ContentRangeResult["contentRange"];
 }

@@ -13,13 +13,13 @@ jobs:
   lints:
     runs-on: ubuntu-latest
     steps:
-    - uses: wyvox/action@1
-    - run: pnpm lint
-    - run: pnpm format
-    - uses: wyvox/action-no-git-diff@v1
+      - uses: wyvox/action@1
+      - run: pnpm lint
+      - run: pnpm format
+      - uses: wyvox/action-no-git-diff@v1
 
   tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: wyvox/action@1
-    - run: pnpm test
+      - uses: wyvox/action@1
+      - run: pnpm test

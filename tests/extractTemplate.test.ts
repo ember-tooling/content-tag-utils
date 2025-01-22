@@ -1,13 +1,13 @@
-import { describe, it, expect } from 'vitest';
-import { extractTemplates } from 'content-tag-utils';
+import { describe, it, expect } from "vitest";
+import { extractTemplates } from "content-tag-utils";
 
-describe('extractTemplates', function() {
+describe("extractTemplates", function () {
   const script =
-    /* 1 */ 'export const SomeComponent = <template>\n' +
-    /* 2 */ '<button></button>\n' +
-    /* 3 */ '</template>';
+    /* 1 */ "export const SomeComponent = <template>\n" +
+    /* 2 */ "<button></button>\n" +
+    /* 3 */ "</template>";
 
-  it('gives me the value for the README', () => {
+  it("gives me the value for the README", () => {
     let file = `
 export const Foo = <template>
     Hello there
@@ -34,10 +34,9 @@ export const Foo = <template>
         },
       ]
     `);
-
   });
 
-  it('returns the parsed template if the content could be parsed as a script', function() {
+  it("returns the parsed template if the content could be parsed as a script", function () {
     expect(extractTemplates(script)).toMatchInlineSnapshot(`
       [
         {
@@ -60,7 +59,7 @@ export const Foo = <template>
     `);
   });
 
-  it('returns the entire content as the extension is a script file', function() {
+  it("returns the entire content as the extension is a script file", function () {
     expect(extractTemplates(script)).toMatchInlineSnapshot(`
       [
         {
@@ -84,7 +83,7 @@ export const Foo = <template>
   });
 });
 
-describe('extractTemplates with multiple templates', function() {
+describe("extractTemplates with multiple templates", function () {
   const multiTemplateScript = [
     /* 1 */ `import type { TOC } from '@ember/component/template-only'`,
     /* 2 */ ``,
@@ -95,9 +94,9 @@ describe('extractTemplates with multiple templates', function() {
     /* 7 */ `  {{yield}}`,
     /* 8 */ `</template> satisfies TOC<{ Blocks: { default: [] }}>`,
     /* 9 */ ``,
-  ].join('\n');
+  ].join("\n");
 
-  it('has correct templateInfos', function() {
+  it("has correct templateInfos", function () {
     expect(extractTemplates(multiTemplateScript)).toMatchInlineSnapshot(`
       [
         {
@@ -148,4 +147,3 @@ describe('extractTemplates with multiple templates', function() {
     `);
   });
 });
-

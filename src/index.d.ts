@@ -7,7 +7,8 @@
  */
 export function transform(
   source: string,
-  eachTemplate: (innerContent: string) => string): string;
+  eachTemplate: (innerContent: string) => string,
+): string;
 
 interface ContentRangeResult {
   /**
@@ -23,7 +24,7 @@ interface ContentRangeResult {
      * The end byte index of the content-range
      */
     end: number;
-  }
+  };
 }
 
 /**
@@ -42,31 +43,32 @@ export function coordinatesOf(
    * one of the entries from the array returned from content-tag's parse function
    * (only contentRange is needed)
    */
-  parseResult: ContentRangeResult): {
-    /**
-     * Line number that the content starts on.
-     * This is 1-indexed
-     */
-    line: number;
-    /**
-     * Column number that the content starts on.
-     * This is 0-indexed
-     */
-    column: number;
-    /**
-     * How much the `<template>` is indented (as if in a class)
-     */
-    columnOffset: number;
+  parseResult: ContentRangeResult,
+): {
+  /**
+   * Line number that the content starts on.
+   * This is 1-indexed
+   */
+  line: number;
+  /**
+   * Column number that the content starts on.
+   * This is 0-indexed
+   */
+  column: number;
+  /**
+   * How much the `<template>` is indented (as if in a class)
+   */
+  columnOffset: number;
 
-    /**
-     * The character index of the start of the content in the original source
-     */
-    start: number;
-    /**
-     * The character index of the end of the content in the original source
-     */
-    end: number;
-  };
+  /**
+   * The character index of the start of the content in the original source
+   */
+  start: number;
+  /**
+   * The character index of the end of the content in the original source
+   */
+  end: number;
+};
 
 export function extractTemplates(source: string): {
   // Useful for further processing
@@ -98,9 +100,20 @@ export function extractTemplates(source: string): {
    */
   end: number;
 
-  contentRange: ContentRangeResult['contentRange'];
+  contentRange: ContentRangeResult["contentRange"];
+}[];
 
-}[]
+/**
+ * Given a set of templates, the source, and a transform function, return a new string representing
+ * what the the source should become.
+ *
+ * This is split from the `transform` function for helping optimize how frequently a full parse on the source document is needed.
+ */
+export function replaceTemplates(
+  source: string,
+  templates: ReturnType<import("./parse.js").parse>,
+  eachTemplate: (innerContents: string) => string,
+): string;
 
 /**
  * Given inner coordinates scoped to a template, this function returns the coordinates
@@ -108,28 +121,34 @@ export function extractTemplates(source: string): {
  */
 export function reverseInnerCoordinates(
   /**
-    * The coordinates of the template in the original source
-    */
-  templateCoordinates: { line: number, column: number },
+   * The coordinates of the template in the original source
+   */
+  templateCoordinates: { line: number; column: number },
   /**
-   * The coordinates of the cursor, node, whatever within and relative to 
+   * The coordinates of the cursor, node, whatever within and relative to
    * the statr of inner template contents.
    */
-  innerCoordinates: { line: number, endLine: number, column: number, endColumn: number }): {
-    /**
-     * The line in the original source file
-     */
+  innerCoordinates: {
     line: number;
-    /**
-     * The end line in the original source file
-     */
     endLine: number;
-    /**
-     * The column in the original source file
-     */
     column: number;
-    /**
-     * The end column in the original source file
-     */
     endColumn: number;
-  }
+  },
+): {
+  /**
+   * The line in the original source file
+   */
+  line: number;
+  /**
+   * The end line in the original source file
+   */
+  endLine: number;
+  /**
+   * The column in the original source file
+   */
+  column: number;
+  /**
+   * The end column in the original source file
+   */
+  endColumn: number;
+};

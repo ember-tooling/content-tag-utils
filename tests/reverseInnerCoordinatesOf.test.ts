@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import { extractTemplates, reverseInnerCoordinates } from "content-tag-utils";
 
-describe('reverseInnerCoordinates', () => {
-  it('gives me the value for the README', () => {
+describe("reverseInnerCoordinates", () => {
+  it("gives me the value for the README", () => {
     let file = `
 export const Foo = <template>
     Hello there
@@ -28,10 +28,10 @@ export const Foo = <template>
     `);
   });
 
-  it('transforms the coordinates', () => {
-    let js = '<template>{{book}}</template>';
+  it("transforms the coordinates", () => {
+    let js = "<template>{{book}}</template>";
     //                    ^ Error here. This isn't defined
-    // Example -- pointing at ^ range made by the node representing `book` 
+    // Example -- pointing at ^ range made by the node representing `book`
     const lintResult = {
       column: 2,
       endColumn: 6,

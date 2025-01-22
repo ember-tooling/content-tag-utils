@@ -1,5 +1,5 @@
-import { coordinatesOf } from './coordinates-of.js';
-import { parse } from './parse.js';
+import { coordinatesOf } from "./coordinates-of.js";
+import { parse } from "./parse.js";
 
 /**
  * @param {string} source
@@ -21,10 +21,10 @@ export function extractTemplates(source) {
 }
 
 /**
-  * @param {ReturnType<typeof coordinatesOf>} coordinates
-  * @param {string} contents
-  * @param {import('./internal-types.ts').ContentRangeResult} parsed
-  */
+ * @param {ReturnType<typeof coordinatesOf>} coordinates
+ * @param {string} contents
+ * @param {import('./internal-types.ts').ContentRangeResult} parsed
+ */
 function makeTemplateInfo(coordinates, contents, parsed) {
   let { line, column, start, end, columnOffset } = coordinates;
 
@@ -42,5 +42,5 @@ function makeTemplateInfo(coordinates, contents, parsed) {
 
     // Relevant data from content-tag, for reversing the coordinates
     byteRange: parsed.contentRange,
-  }
+  };
 }
