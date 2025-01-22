@@ -19,7 +19,10 @@ export function coordinatesOf(source, parsedResult) {
   let endCharIndex = before + inclusiveContent.length;
 
   const contentBeforeTemplateStart = beforeContent.split("\n");
-  const lineBeforeTemplateStart = contentBeforeTemplateStart.at(-1);
+  /** @type {string} */
+  const lineBeforeTemplateStart = /** @type {string} */ (
+    contentBeforeTemplateStart.at(-1)
+  );
 
   /**
    * Reminder:

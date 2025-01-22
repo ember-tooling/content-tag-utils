@@ -13,7 +13,7 @@ export const Foo = <template>
 `;
     const parsed = p.parse(file);
 
-    expect(coordinatesOf(file, parsed[0])).toMatchInlineSnapshot(`
+    expect(coordinatesOf(file, parsed[0]!)).toMatchInlineSnapshot(`
       {
         "column": 29,
         "columnOffset": 0,
@@ -28,7 +28,7 @@ export const Foo = <template>
     let js = "<template>{{book}}</template>";
 
     const parsed = p.parse(js);
-    const result = coordinatesOf(js, parsed[0]);
+    const result = coordinatesOf(js, parsed[0]!);
     expect(result.line).toBe(1);
     expect(result.column).toBe(10);
     expect(result.columnOffset).toBe(0);
@@ -56,7 +56,7 @@ export const Foo = <template>
       /* 9 */ "}\n";
 
     const parsed = p.parse(typescript);
-    const result = coordinatesOf(typescript, parsed[0]);
+    const result = coordinatesOf(typescript, parsed[0]!);
     expect(result.line).toBe(6);
     // this may look weird, but this 12th character on line 6 is the \n
     expect(result.column).toBe(12);
@@ -85,7 +85,7 @@ export const Foo = <template>
     ].join("\n");
     const parsed = p.parse(multiTemplateScript);
 
-    expect(coordinatesOf(multiTemplateScript, parsed[0]))
+    expect(coordinatesOf(multiTemplateScript, parsed[0]!))
       .toMatchInlineSnapshot(`
       {
         "column": 19,
@@ -111,7 +111,7 @@ export const Foo = <template>
     ].join("\n");
     const parsed = p.parse(multiTemplateScript);
 
-    expect(coordinatesOf(multiTemplateScript, parsed[0]))
+    expect(coordinatesOf(multiTemplateScript, parsed[0]!))
       .toMatchInlineSnapshot(`
       {
         "column": 27,
@@ -121,7 +121,7 @@ export const Foo = <template>
         "start": 86,
       }
     `);
-    expect(coordinatesOf(multiTemplateScript, parsed[1]))
+    expect(coordinatesOf(multiTemplateScript, parsed[1]!))
       .toMatchInlineSnapshot(`
       {
         "column": 27,
@@ -131,7 +131,7 @@ export const Foo = <template>
         "start": 127,
       }
     `);
-    expect(coordinatesOf(multiTemplateScript, parsed[2]))
+    expect(coordinatesOf(multiTemplateScript, parsed[2]!))
       .toMatchInlineSnapshot(`
       {
         "column": 27,
@@ -158,7 +158,7 @@ export const Foo = <template>
       /* 11 */ "\n";
 
     const parsed = p.parse(typescript);
-    const result = coordinatesOf(typescript, parsed[0]);
+    const result = coordinatesOf(typescript, parsed[0]!);
     expect(result.line).toBe(6);
     expect(result.column).toBe(12);
     expect(result.columnOffset).toBe(2);

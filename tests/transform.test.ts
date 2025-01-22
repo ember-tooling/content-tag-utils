@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { transform } from "content-tag-utils";
-import { Preprocessor } from "content-tag";
-
-const p = new Preprocessor();
 
 describe(`transform`, () => {
   it("works", () => {
@@ -16,7 +13,7 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, (hbs) => "replaced!");
+    let result = transform(gjs, () => "replaced!");
 
     expect(result).to.deep.equal(
       [
@@ -38,7 +35,7 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, (hbs) => "replaced!");
+    let result = transform(gjs, () => "replaced!");
 
     expect(result).to.deep.equal(
       [
