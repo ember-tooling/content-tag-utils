@@ -8,6 +8,10 @@ Aimed at sharing logic between:
 - [ember-template-lint](https://github.com/ember-template-lint/ember-template-lint)
 
 
+> [!NOTE]  
+> This utility is meant for local tooling and not the browser, or transforming runtime code. No sourcemaps are involved. (Sourcemaps should be used when transforming code meant for runtime).
+
+
 ## Install
 
 ```bash
@@ -20,6 +24,7 @@ npm add content-tag-utils
 import {
     transform,
     extractTemplates,
+    replaceTemplates,
     coordinatesOf,
     reverseInnerCoordinates,
 } from "content-tag-utils";
@@ -27,10 +32,26 @@ import {
 
 ### transform
 
-Transforms each template within a gjs or gts file
+Transforms each template within a gjs or gts file in one go.
+
+This is a convenience function that combines `extractTemplates`, `coordinatesOf`, and `replaceTemplates`
 
 ```js
 import { transform } from 'content-tag-utils';
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+
+let result = transform(file, (contents) => `${contents}!`);
+```
+result ( a ! character is added right before the closing </template>):
+```gjs
+export const Foo = <template>
+    Hello there
+!</template>
 ```
 
 ### extractTemplates
@@ -39,7 +60,33 @@ Parses a given gjs / gts file and returns an object with character-indexes, the 
 
 ```js
 import { extractTemplates } from 'content-tag-utils';
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+
+let result = extractTemplates(file);
 ```
+result:
+```gjs
+[
+    {
+        contents: `
+    Hello there
+`,
+        line: 2,
+        column: 29,
+        columnOffset: 0,
+
+        characterRange: { start: 30, end: 47 },
+        byteRange: { start: 30, end: 47 },
+    }
+]
+```
+
+### replaceTemplates
 
 ### coordinatesOf
 
@@ -47,6 +94,26 @@ For a given source document (gjs or gts), and a single parseResult (one of the e
 
 ```js
 import { coordinatesOf } from 'content-tag-utils';
+import { Preprocessor } from 'content/-tag'
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+
+let result = coordinatesOf(file);
+```
+result (all values are character-indexes):
+```gjs
+{
+    line: 2,
+    column: 29,
+    columnOffset: 0,
+
+    start: 30,
+    end: 47,
+}
 ```
 
 
@@ -57,4 +124,31 @@ Given inner coordinates scoped to a template, this function returns the coordina
 
 ```js
 import { reverseInnerCoordinates } from 'content-tag-utils';
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+// e.g.: a lint result
+let innerCoordinates = {
+    line: 2,
+    column: 4,
+    endColumn: 5,
+    endLine: 2,
+    // extraneous, but may be present in your tool
+    error: 'no capital letters!',
+};
+
+const templateInfos = extractTemplates(file);
+const result = reverseInnerCoordinates(templateInfos[0]!, innerCoordinates);
+```
+result:
+```gjs
+{
+    column: 4,
+    endColumn: 5,
+    endLine: 3,
+    line: 3,
+}
 ```

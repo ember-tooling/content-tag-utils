@@ -2,6 +2,32 @@ import { describe, it, expect } from 'vitest';
 import { extractTemplates, reverseInnerCoordinates } from "content-tag-utils";
 
 describe('reverseInnerCoordinates', () => {
+  it('gives me the value for the README', () => {
+    let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+    const innerCoordinates = {
+      line: 2,
+      column: 4,
+      endColumn: 5,
+      endLine: 2,
+    };
+
+    const templateInfos = extractTemplates(file);
+    const result = reverseInnerCoordinates(templateInfos[0]!, innerCoordinates);
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "column": 4,
+        "endColumn": 5,
+        "endLine": 3,
+        "line": 3,
+      }
+    `);
+  });
+
   it('transforms the coordinates', () => {
     let js = '<template>{{book}}</template>';
     //                    ^ Error here. This isn't defined

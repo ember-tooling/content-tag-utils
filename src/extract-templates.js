@@ -38,10 +38,9 @@ function makeTemplateInfo(coordinates, contents, parsed) {
     columnOffset,
 
     // Character Indexes
-    start,
-    end,
+    characterRange: { start, end },
 
     // Relevant data from content-tag, for reversing the coordinates
-    contentRange: parsed.contentRange,
+    byteRange: parsed.contentRange,
   }
 }

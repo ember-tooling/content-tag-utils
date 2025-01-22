@@ -5,6 +5,29 @@ import { Preprocessor } from 'content-tag';
 const p = new Preprocessor();
 
 describe('coordinatesOf', function() {
+
+
+  it('gives me the value for the README', () => {
+    let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+    const parsed = p.parse(file);
+
+    expect(coordinatesOf(file, parsed[0])).toMatchInlineSnapshot(`
+      {
+        "column": 29,
+        "columnOffset": 0,
+        "end": 47,
+        "line": 2,
+        "start": 30,
+      }
+    `);
+
+  });
+
+
   it('makes sense for one line components', function() {
     let js = '<template>{{book}}</template>';
 
