@@ -1,3 +1,5 @@
+export { Transformer } from "./transformer.js";
+
 /**
  * Transforms each template within a gjs or gts file
  *
