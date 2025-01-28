@@ -72,51 +72,6 @@ export function coordinatesOf(
   end: number;
 };
 
-export function extractTemplates(source: string): {
-  // Useful for further processing
-  contents: string;
-
-  /**
-   * The line index of a document or partial document.
-   * This is 1-indexed, rather than the traditional 0-index that arrays use.
-   */
-  line: number;
-  /**
-   * The column index of a document or partial document.
-   * This is a 0-indexed value, like how arrays traditionally are.
-   *
-   * (Unlike Line-indexes)
-   */
-  column: number;
-  /**
-   * How much the `<template>` is indented (as if in a class)
-   */
-  columnOffset: number;
-
-  /**
-   * start-index of the character of the beginning the range
-   */
-  start: number;
-  /**
-   * end-index of the character of the ending the range
-   */
-  end: number;
-
-  contentRange: ContentRangeResult["contentRange"];
-}[];
-
-/**
- * Given a set of templates, the source, and a transform function, return a new string representing
- * what the the source should become.
- *
- * This is split from the `transform` function for helping optimize how frequently a full parse on the source document is needed.
- */
-export function replaceTemplates(
-  source: string,
-  templates: ReturnType<import("./parse.js").parse>,
-  eachTemplate: (innerContents: string) => string,
-): string;
-
 /**
  * Given inner coordinates scoped to a template, this function returns the coordinates
  * in the overall source file.
