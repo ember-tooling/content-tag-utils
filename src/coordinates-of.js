@@ -1,5 +1,5 @@
 /**
- * @param {string} source
+ * @param {string | Buffer} source
  * @param {import('./internal-types.ts').ContentRangeResult} parsedResult
  */
 export function coordinatesOf(source, parsedResult) {
@@ -7,8 +7,18 @@ export function coordinatesOf(source, parsedResult) {
    * range is the full range, including the leading and trailing <tempalte>,</template>
    * contentRange is the range between / excluding the leading and trailing <template>,</template>
    */
+  let buffer;
+  if (typeof source === "string") {
+    buffer = Buffer.from(source, "utf8");
+  } else if (source instanceof Buffer) {
+    buffer = source;
+  } else {
+    throw new Error(
+      `Expected first arg to coordinatesOf to be either a string or buffer`,
+    );
+  }
+
   let { contentRange: byteRange } = parsedResult;
-  let buffer = Buffer.from(source, "utf8");
   let inclusiveContent = buffer
     .slice(byteRange.start, byteRange.end)
     .toString();

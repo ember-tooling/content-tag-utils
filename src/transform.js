@@ -1,12 +1,15 @@
 import { parse } from "./parse.js";
 import { replaceTemplates } from "./replate-templates.js";
+import { Transformer } from "./transformer.js";
 
 /**
  * @param {string} source
  * @param {(innerTemplateContents: string) => string} callback
  */
 export function transform(source, callback) {
-  let templates = parse(source);
+  let t = new Transformer(source);
 
-  return replaceTemplates(source, templates, callback);
+  t.transformAllSync(callback);
+
+  return t.toString();
 }

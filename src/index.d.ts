@@ -1,4 +1,4 @@
-export { Transformer } from "./transformer.js";
+export { Transformer, ParseResultStringUtils } from "./transformer.js";
 
 /**
  * Transforms each template within a gjs or gts file

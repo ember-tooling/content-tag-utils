@@ -1,4 +1,9 @@
+/**
+ * @typedef { import('./public-types.ts').Coordinates} Coordinates
+ */
+import { coordinatesOf } from "./coordinates-of.js";
 import { parse } from "./parse.js";
+import { assert } from "./assert.js";
 
 /**
  * Transforms all <template>s in a gjs/gts file.
@@ -28,6 +33,13 @@ export class Transformer {
   #transforms = new Map();
 
   /**
+   * Map of coordinates to pass to each callback
+   *
+   * @type {Map<object, Coordinates>}
+   */
+  #coordinates = new Map();
+
+  /**
    * @param {string} source
    */
   constructor(source) {
@@ -35,14 +47,19 @@ export class Transformer {
     this.#parseResults = parse(source);
     this.#buffer = Buffer.from(source, "utf8");
     this.#stringUtils = new ParseResultStringUtils(this.#buffer);
+
+    for (let parseResult of this.#parseResults) {
+      let coordinates = coordinatesOf(this.#buffer, parseResult);
+      this.#coordinates.set(parseResult, coordinates);
+    }
   }
 
-  get parseResult() {
+  get parseResults() {
     return this.#parseResults;
   }
 
   /**
-   * @param {(original: string) => string} perTemplateTransform
+   * @param {(original: string, coordinates: Coordinates) => string} perTemplateTransform
    */
   transformAllSync(perTemplateTransform) {
     for (let parseResult of this.#parseResults) {
@@ -51,7 +68,7 @@ export class Transformer {
   }
 
   /**
-   * @param {(previous: string) => Promise<string> | string} perTemplateTransform
+   * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} perTemplateTransform
    */
   async transformAll(perTemplateTransform) {
     let promises = this.#parseResults.map((parseResult) =>
@@ -63,7 +80,7 @@ export class Transformer {
 
   /**
    * @param {ReturnType<typeof parse>[0]} parseResult
-   * @param {(previous: string) => string} transform
+   * @param {(previous: string, coordinates: Coordinates) => string} transform
    * @return { void }
    */
   transformOneSync(parseResult, transform) {
@@ -71,13 +88,15 @@ export class Transformer {
       this.#transforms.get(parseResult) ??
       this.#stringUtils.originalContentOf(parseResult);
 
-    let transformed = transform(previous);
+    let coordinates = this.#getCoordinates(parseResult);
+
+    let transformed = transform(previous, coordinates);
     this.#transforms.set(parseResult, transformed);
   }
 
   /**
    * @param {ReturnType<typeof parse>[0]} parseResult
-   * @param {(old: string) => Promise<string> | string} transform
+   * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} transform
    * @return { Promise<void> }
    */
   async transformOne(parseResult, transform) {
@@ -85,8 +104,24 @@ export class Transformer {
       this.#transforms.get(parseResult) ??
       this.#stringUtils.originalContentOf(parseResult);
 
-    let transformed = await transform(previous);
+    let coordinates = this.#getCoordinates(parseResult);
+
+    let transformed = await transform(previous, coordinates);
     this.#transforms.set(parseResult, transformed);
+  }
+
+  /**
+   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @return {Coordinates}
+   */
+  #getCoordinates(parseResult) {
+    let coordinates = this.#coordinates.get(parseResult);
+
+    assert(
+      coordinates,
+      `Expected coordinates to exist for passed parseResult, but they did not`,
+    );
+    return coordinates;
   }
 
   /**
@@ -101,20 +136,22 @@ export class Transformer {
      */
     for (let parseResult of this.#parseResults) {
       let transformed = this.#transforms.get(parseResult);
+      let originalContent = this.#stringUtils.originalContentOf(parseResult);
+      let originalLength = originalContent.length;
 
       if (!transformed) {
+        offset = 0 - originalLength;
         continue;
       }
 
-      let originalContent = this.#stringUtils.originalContentOf(parseResult);
-      let originalLength = originalContent.length;
       let originalBeforeContent = this.#stringUtils.contentBefore(parseResult);
       let originalStart = originalBeforeContent.length;
-      let originalEnd = originalStart + originalLength;
 
       let openingTag = this.#stringUtils.openingTag(parseResult);
       let closingTag = this.#stringUtils.closingTag(parseResult);
 
+      let originalEnd = originalStart + openingTag.length + originalLength + closingTag.length;
+      
       result =
         result.slice(0, originalStart + offset) +
         openingTag +
@@ -129,7 +166,14 @@ export class Transformer {
   }
 }
 
-class ParseResultStringUtils {
+/**
+ * In a parseResult:
+ * - range: full range, <template></template> inclusive
+ * - contentRange: range between, <template></template> exclusive
+ * - startRange: range of opening <template>
+ * - endRange: range of closing </template>
+ */
+export class ParseResultStringUtils {
   /** @type {Buffer} */
   #buffer;
 
@@ -141,6 +185,8 @@ class ParseResultStringUtils {
   }
 
   /**
+   * Content before the opening <template>
+   *
    * @param {ReturnType<typeof parse>[0]} parseResult
    */
   contentBefore(parseResult) {
@@ -148,13 +194,11 @@ class ParseResultStringUtils {
   }
 
   /**
-   * NOTE: range.start w/ range.end is between the <template> and </template>
-   *
    * @param {ReturnType<typeof parse>[0]} parseResult
    */
   originalContentOf(parseResult) {
     return this.#buffer
-      .slice(parseResult.range.start, parseResult.range.end)
+      .slice(parseResult.contentRange.start, parseResult.contentRange.end)
       .toString();
   }
 
