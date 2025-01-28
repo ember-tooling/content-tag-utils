@@ -32,6 +32,23 @@ let inAClass = [
   "",
 ].join("\n");
 
+let multiWithClass = [
+  "export class Foo {",
+  "  <template>",
+  "    hello there",
+  "    {{log globalThis}}",
+  "  </template>",
+  "}",
+  "",
+  "export const Greeting = <template>",
+  "  <fieldset>",
+  "    <legend>Greeting</legend>",
+  "    <Foo />!",
+  "  </fieldset>",
+  "</template>;",
+  "",
+].join("\n");
+
 describe("Transformer", () => {
   describe("transformAllSync", () => {
     it("noop", () => {
@@ -69,6 +86,34 @@ describe("Transformer", () => {
 
       expect(t.toString()).toMatchInlineSnapshot(`
         "export const Name = <template>x</template>;
+
+        expport const Greeting = <template>x</template>;
+        "
+      `);
+    });
+
+    it("class small replace", () => {
+      let t = new Transformer(inAClass);
+
+      t.transformAllSync(() => "x");
+
+      expect(t.toString()).toMatchInlineSnapshot(`
+        "export class Foo {
+          <template>x</template>
+        }
+        "
+      `);
+    });
+
+    it("class w/ to small replace", () => {
+      let t = new Transformer(multiWithClass);
+
+      t.transformAllSync(() => "x");
+
+      expect(t.toString()).toMatchInlineSnapshot(`
+        "export class Foo {
+          <template>x</template>
+        }
 
         expport const Greeting = <template>x</template>;
         "
@@ -112,6 +157,34 @@ describe("Transformer", () => {
 
       expect(t.toString()).toMatchInlineSnapshot(`
         "export const Name = <template>x</template>;
+
+        expport const Greeting = <template>x</template>;
+        "
+      `);
+    });
+
+    it("class small replace", async () => {
+      let t = new Transformer(inAClass);
+
+      await t.transformAll(() => Promise.resolve("x"));
+
+      expect(t.toString()).toMatchInlineSnapshot(`
+        "export class Foo {
+          <template>x</template>
+        }
+        "
+      `);
+    });
+
+    it("class w/ to small replace", async () => {
+      let t = new Transformer(multiWithClass);
+
+      await t.transformAll(() => Promise.resolve("x"));
+
+      expect(t.toString()).toMatchInlineSnapshot(`
+        "export class Foo {
+          <template>x</template>
+        }
 
         expport const Greeting = <template>x</template>;
         "
