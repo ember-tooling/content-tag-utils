@@ -10,9 +10,8 @@ it("can remove contents", async () => {
 
     export const Poo = <template>x</template>;
 
-    export const Greeting = <template>
-      Hello, <Name @name={{@name}} />!
-      <R<template>x</template>"
+    export const Greeting = <template>x</template>;
+    "
   `);
 });
 
@@ -25,8 +24,8 @@ describe("zalgo", () => {
 
     export const Poo = <template>h̴̡̼͈̱͓͔͔͕̟̜̠̤̬̖͌̃͌͋í̸̺̥͉̼͛̽̐̈́̇̄̄̉̚͝</template>;
 
-    export const Greeting = <template>
-      H<template>h̴̡̼͈̱͓͔͔͕̟̜̠̤̬̖͌̃͌͋í̸̺̥͉̼͛̽̐̈́̇̄̄̉̚͝</template>"
+    export const Greeting = <template>h̴̡̼͈̱͓͔͔͕̟̜̠̤̬̖͌̃͌͋í̸̺̥͉̼͛̽̐̈́̇̄̄̉̚͝</template>;
+    "
   `);
   });
 });
@@ -40,7 +39,8 @@ describe("korean", () => {
 
       export const Poo = <template>ㄱ</template>;
 
-      export const Greeting = <template>ㄱ</template>"
+      export const Greeting = <template>ㄱ</template>;
+      "
     `);
   });
 });

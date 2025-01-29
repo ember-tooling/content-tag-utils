@@ -1,2 +1,5 @@
+# Generated files
+# (Or better manually updated)
 *.yaml
 *.yml
+*.md
