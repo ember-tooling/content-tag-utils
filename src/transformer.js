@@ -111,8 +111,7 @@ export class Transformer {
     let coordinates = this.#getCoordinates(parseResult);
 
     let transformed = transform(previous, coordinates);
-    let buffer = Buffer.from(transformed, "utf8");
-    this.#transforms.set(parseResult, buffer);
+    this.#transforms.set(parseResult, transformed);
   }
 
   /**
@@ -132,8 +131,7 @@ export class Transformer {
     let coordinates = this.#getCoordinates(parseResult);
 
     let transformed = await transform(previous, coordinates);
-    let buffer = Buffer.from(transformed, "utf8");
-    this.#transforms.set(parseResult, buffer);
+    this.#transforms.set(parseResult, transformed);
   }
 
   /**
@@ -212,7 +210,7 @@ export class Transformer {
         closingTag +
         result.slice(originalEnd + offset, result.length);
 
-      offset += transformed.toString().length - originalLength;
+      offset += transformed.length - originalLength;
     }
 
     return result;
