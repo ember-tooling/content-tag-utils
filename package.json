@@ -1,6 +1,6 @@
 {
   "name": "content-tag-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "utilities for working with content-tag: transforming, working with line/column information, etc",
   "repository": {
     "type": "git",
