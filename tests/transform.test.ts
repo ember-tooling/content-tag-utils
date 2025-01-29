@@ -1,5 +1,22 @@
 import { describe, it, expect } from "vitest";
-import { transformSync } from "content-tag-utils";
+import { transform, transformSync } from "content-tag-utils";
+import { unicodeMulti } from "./helpers.js";
+
+describe("transform", () => {
+  it("works with unicode", async () => {
+    let result = await transform(unicodeMulti, () => "x");
+
+    expect(result).toMatchInlineSnapshot(`
+      "export const Run = <template>x</template>;
+
+      export const Poo = <template>x</template>;
+
+      export const Greeting = <template>
+        Hello, <Name @name={{@name}} />!
+        <R<template>x</template>"
+    `);
+  });
+});
 
 describe(`transformSync`, () => {
   it("works", () => {

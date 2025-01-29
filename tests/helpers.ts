@@ -8,6 +8,29 @@ export const simpleTest = [
   "});",
 ].join("\n");
 
+export const unicodeSingle = [
+  "export const Name = <template>",
+  "  💩",
+  "</template>;",
+  "",
+].join("\n");
+
+export const unicodeMulti = [
+  "export const Run = <template>",
+  "  r̸̳͙̟̳̺̩̎̍̎̚͠ǘ̷̟̀͂̽̿̅̆̈́n̷̜̣̙̫̦̳͇̞̣̻͑̊̂́̿̈́̕͜͜͠ͅ",
+  "</template>;",
+  "",
+  "export const Poo = <template>",
+  "  💩",
+  "</template>;",
+  "",
+  "export const Greeting = <template>",
+  "  Hello, <Name @name={{@name}} />!",
+  "  <Run />",
+  "</template>;",
+  "",
+].join("\n");
+
 export const multiTemplate = [
   "export const Name = <template>",
   "  {{@name}}",
