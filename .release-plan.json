@@ -1,0 +1,21 @@
+{
+  "solution": {
+    "content-tag-utils": {
+      "impact": "minor",
+      "oldVersion": "0.0.0",
+      "newVersion": "0.1.0",
+      "constraints": [
+        {
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
+        }
+      ],
+      "pkgJSONPath": "./package.json"
+    }
+  },
+  "description": "## Release (2025-01-29)\n\ncontent-tag-utils 0.1.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#1](https://github.com/NullVoxPopuli/content-tag-utils/pull/1) Transformer utility for supporting both sync and async transforms ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### :house: Internal\n* `content-tag-utils`\n  * [#2](https://github.com/NullVoxPopuli/content-tag-utils/pull/2) npx create-release-plan-setup@latest --update ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+}
