@@ -1,14 +1,28 @@
 /**
- * @param {string} source
+ * For a given source document (gjs or gts), and a single parseResult (one of the entries from the array returned from content-tag's parse), what is the line/column number of the first character
+ * for that parseResult, and the columnOffset (useful for extracting templates to do work on and then put back, or giving pointers to errors present in the template).
+ *
+ * @param {string | Buffer} source the original source
  * @param {import('./internal-types.ts').ContentRangeResult} parsedResult
+ * @return {import('./public-types.ts').Coordinates}
  */
 export function coordinatesOf(source, parsedResult) {
   /**
    * range is the full range, including the leading and trailing <tempalte>,</template>
    * contentRange is the range between / excluding the leading and trailing <template>,</template>
    */
+  let buffer;
+  if (typeof source === "string") {
+    buffer = Buffer.from(source, "utf8");
+  } else if (source instanceof Buffer) {
+    buffer = source;
+  } else {
+    throw new Error(
+      `Expected first arg to coordinatesOf to be either a string or buffer`,
+    );
+  }
+
   let { contentRange: byteRange } = parsedResult;
-  let buffer = Buffer.from(source, "utf8");
   let inclusiveContent = buffer
     .slice(byteRange.start, byteRange.end)
     .toString();
