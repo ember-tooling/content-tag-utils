@@ -43,7 +43,7 @@ it("small replace", () => {
 
   t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
-    return 'x';
+    return "x";
   });
 
   expect(coords).toMatchInlineSnapshot(`
@@ -67,13 +67,12 @@ it("multiple small replace", () => {
 
   let coords;
 
-
   t.transformOneSync(t.parseResults[1]!, () => {
-    return 'second  first';
+    return "second  first";
   });
   t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
-    return 'x';
+    return "x";
   });
 
   expect(coords).toMatchInlineSnapshot(`
@@ -100,7 +99,7 @@ it("class small replace", () => {
 
   t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
-    return 'x';
+    return "x";
   });
 
   expect(coords).toMatchInlineSnapshot(`
@@ -127,7 +126,7 @@ it("class w/ to small replace", () => {
 
   t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
-    return 'x';
+    return "x";
   });
 
   expect(coords).toMatchInlineSnapshot(`
