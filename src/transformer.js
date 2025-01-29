@@ -45,7 +45,12 @@ export class Transformer {
    */
   constructor(source) {
     this.#originalSource = source;
-    this.#parseResults = parse(source);
+
+    let parsed = parse(source);
+    let frozenParsed = parsed.map(Object.freeze);
+
+    // SAFETY: readonly types are super annoying
+    this.#parseResults = /** @type {ReturnType<typeof parse>} */ (frozenParsed);
     this.#buffer = Buffer.from(source, "utf8");
     this.#stringUtils = new ParseResultStringUtils(this.#buffer);
 
@@ -55,11 +60,19 @@ export class Transformer {
     }
   }
 
+  /**
+   * Output from content-tag. Each of these is used as the key
+   * for working with transforms, and getting coordinates.
+   *
+   * Mutating them is not allowed.
+   */
   get parseResults() {
     return this.#parseResults;
   }
 
   /**
+   * Synchronously run a transform on all of the templates
+   *
    * @param {(original: string, coordinates: Coordinates) => string} perTemplateTransform
    */
   transformAllSync(perTemplateTransform) {
@@ -69,6 +82,8 @@ export class Transformer {
   }
 
   /**
+   * Asynchronously run a transform on all of the templates
+   *
    * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} perTemplateTransform
    */
   async transformAll(perTemplateTransform) {
@@ -80,6 +95,8 @@ export class Transformer {
   }
 
   /**
+   * Transform one template
+   *
    * @param {ReturnType<typeof parse>[0]} parseResult
    * @param {(previous: string, coordinates: Coordinates) => string} transform
    * @return { void }
@@ -98,6 +115,8 @@ export class Transformer {
   }
 
   /**
+   * Transform one template
+   *
    * @param {ReturnType<typeof parse>[0]} parseResult
    * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} transform
    * @return { Promise<void> }

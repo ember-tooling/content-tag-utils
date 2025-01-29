@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { transform } from "content-tag-utils";
+import { transformSync } from "content-tag-utils";
 
-describe(`transform`, () => {
+describe(`transformSync`, () => {
   it("works", () => {
     const gjs = [
       "test('it renders', async (assert) => {",
@@ -13,7 +13,7 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, () => "replaced!");
+    let result = transformSync(gjs, () => "replaced!");
 
     expect(result).to.deep.equal(
       [
@@ -35,7 +35,7 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, () => "replaced!");
+    let result = transformSync(gjs, () => "replaced!");
 
     expect(result).to.deep.equal(
       [
@@ -46,7 +46,7 @@ describe(`transform`, () => {
     );
   });
 
-  it("handles a no-op transform", () => {
+  it("handles a no-op transformSync", () => {
     const gjs = [
       "test('it renders', async (assert) => {",
       "  await render(<template>",
@@ -57,12 +57,12 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, (x) => x);
+    let result = transformSync(gjs, (x) => x);
 
     expect(result).toEqual(gjs);
   });
 
-  it("applys a transform", () => {
+  it("applys a transformSync", () => {
     const gjs = [
       "test('it renders', async (assert) => {",
       "  await render(<template>",
@@ -73,7 +73,7 @@ describe(`transform`, () => {
       "});",
     ].join("\n");
 
-    let result = transform(gjs, () => "new content");
+    let result = transformSync(gjs, () => "new content");
 
     expect(result).toMatchInlineSnapshot(`
       "test('it renders', async (assert) => {

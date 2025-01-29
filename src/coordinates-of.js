@@ -1,6 +1,10 @@
 /**
- * @param {string | Buffer} source
+ * For a given source document (gjs or gts), and a single parseResult (one of the entries from the array returned from content-tag's parse), what is the line/column number of the first character
+ * for that parseResult, and the columnOffset (useful for extracting templates to do work on and then put back, or giving pointers to errors present in the template).
+ *
+ * @param {string | Buffer} source the original source
  * @param {import('./internal-types.ts').ContentRangeResult} parsedResult
+ * @return {import('./public-types.ts').Coordinates}
  */
 export function coordinatesOf(source, parsedResult) {
   /**

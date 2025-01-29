@@ -31,22 +31,21 @@ Using from source / github, via package.json:
 
 ```js
 import {
-  transform,
-  extractTemplates,
-  replaceTemplates,
+  transform, transformSync,
   coordinatesOf,
-  reverseInnerCoordinates,
+  Transformer,
 } from "content-tag-utils";
 ```
 
-### transform
+### Transformer
 
-Transforms each template within a gjs or gts file in one go.
+A general utility for working with content-tag, keeping tracked of each template as you apply transformations.
+Transformations are recorded and then applied later when calling `.toString()`.
 
-This is a convenience function that combines `extractTemplates` and `replaceTemplates`
+For example:
 
 ```js
-import { transform } from "content-tag-utils";
+import { Transformer } from "content-tag-utils";
 
 let file = `
 export const Foo = <template>
@@ -54,10 +53,58 @@ export const Foo = <template>
 </template>
 `;
 
-let result = transform(file, (contents) => `${contents}!`);
+let t = new Transformer(file);
+
+// apply some transformations
+await t.transform((contents, coordinates => {
+    /* ... */
+    return 'new content';
+});
+t.transformSync((contents, coordinates) => {
+    /* ... */
+    return 'new content 2';
+})
+
+// get the output
+t.toString();
+
+// can also do more transformations and get the output again later
+await t.transform(/* ... */ )
+t.toString();
 ```
 
-result ( a ! character is added right before the closing </template>):
+Properties / Methods:
+ - `t.toString()` returns a string of the original file with all applied transforms
+ - `t.parseResults` output from `content-tag` , but frozen / read-only - these are used as keys for other methods
+ - `t.transformAllSync()` 
+ - `t.transformAll()`
+ - `t.transformOneSync()`
+ - `t.transformOne()`
+ - `t.reverseInnerCoordinatesOf()` Given in-template coordinates, returns the coordinates in the context of the file
+
+
+### transform + transformSync
+
+Transforms each template within a gjs or gts file in one go.
+
+These are convenience functions that wraps the `Transformer`.
+
+The first argument to the callback will be the previous template-contents, and the second argument will be the coordinates of that template.
+
+```js
+import { transform, transformSync } from "content-tag-utils";
+
+let file = `
+export const Foo = <template>
+    Hello there
+</template>
+`;
+
+let result = await transform(file, (contents, coordinates) => `${contents}!`);
+let result2 = transformSync(file, (contents, coordinates) => `${contents}!`);
+```
+
+result / result 2 ( a ! character is added right before the closing </template>):
 
 ```gjs
 export const Foo = <template>
@@ -65,64 +112,6 @@ export const Foo = <template>
 !</template>
 ```
 
-### extractTemplates
-
-Parses a given gjs / gts file and returns an object with character-indexes, the contents of each template, and the context in which that template was found (which is useful for reversing the coordinates of the inner content).
-
-```js
-import { extractTemplates } from "content-tag-utils";
-
-let file = `
-export const Foo = <template>
-    Hello there
-</template>
-`;
-
-let result = extractTemplates(file);
-```
-
-result:
-
-```gjs
-[
-    {
-        contents: `
-    Hello there
-`,
-        line: 2,
-        column: 29,
-        columnOffset: 0,
-
-        characterRange: { start: 30, end: 47 },
-        byteRange: { start: 30, end: 47 },
-    }
-]
-```
-
-### replaceTemplates
-
-Given a set of templates, the source, and a transform function, return a new string representing what the the source should become.
-This is split from the `transform` function for helping optimize how frequently a full parse on the source document is needed.
-
-```js
-import { replaceTemplates } from "content-tag-utils";
-import { Preprocessor } from "content-tag";
-
-let p = new Preprocessor();
-
-let file = `
-export const Foo = <template>
-    Hello there
-</template>
-`;
-
-let parsed = p.parse(file);
-
-let result = replaceTemplates(file, parsed, (contents) => {
-  /* transform here */
-  return contents;
-});
-```
 
 ### coordinatesOf
 
