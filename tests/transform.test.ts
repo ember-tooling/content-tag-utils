@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { transform, transformSync } from "content-tag-utils";
-import { unicodeMulti } from "./helpers.js";
+import { transformSync } from "content-tag-utils";
 
 describe(`transformSync`, () => {
   it("works", () => {
