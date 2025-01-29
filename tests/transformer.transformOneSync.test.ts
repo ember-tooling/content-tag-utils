@@ -41,7 +41,7 @@ it("small replace", () => {
 
   let coords;
 
-  t.transformOneSync(t.parseResults[0]!, (x, c) => {
+  t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
     return 'x';
   });
@@ -68,10 +68,10 @@ it("multiple small replace", () => {
   let coords;
 
 
-  t.transformOneSync(t.parseResults[1]!, (x) => {
+  t.transformOneSync(t.parseResults[1]!, () => {
     return 'second  first';
   });
-  t.transformOneSync(t.parseResults[0]!, (x, c) => {
+  t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
     return 'x';
   });
@@ -98,7 +98,7 @@ it("class small replace", () => {
 
   let coords;
 
-  t.transformOneSync(t.parseResults[0]!, (x, c) => {
+  t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
     return 'x';
   });
@@ -125,7 +125,7 @@ it("class w/ to small replace", () => {
 
   let coords;
 
-  t.transformOneSync(t.parseResults[0]!, (x, c) => {
+  t.transformOneSync(t.parseResults[0]!, (_x, c) => {
     coords = c;
     return 'x';
   });

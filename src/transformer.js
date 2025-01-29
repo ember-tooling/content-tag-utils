@@ -1,6 +1,7 @@
 /**
  * @typedef { import('./public-types.ts').Coordinates} Coordinates
  */
+import { reverseInnerCoordinates } from "./reverse-inner-coordinates.js";
 import { coordinatesOf } from "./coordinates-of.js";
 import { parse } from "./parse.js";
 import { assert } from "./assert.js";
@@ -84,6 +85,8 @@ export class Transformer {
    * @return { void }
    */
   transformOneSync(parseResult, transform) {
+    this.#assertParseResult(parseResult);
+
     let previous =
       this.#transforms.get(parseResult) ??
       this.#stringUtils.originalContentOf(parseResult);
@@ -100,6 +103,8 @@ export class Transformer {
    * @return { Promise<void> }
    */
   async transformOne(parseResult, transform) {
+    this.#assertParseResult(parseResult);
+
     let previous =
       this.#transforms.get(parseResult) ??
       this.#stringUtils.originalContentOf(parseResult);
@@ -122,6 +127,33 @@ export class Transformer {
       `Expected coordinates to exist for passed parseResult, but they did not`,
     );
     return coordinates;
+  }
+
+  /**
+   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @return {ReturnType<typeof parse>[0]} parseResult
+   */
+  #assertParseResult(parseResult) {
+    assert(
+      this.parseResults.includes(parseResult),
+      `Expected passed parseResult to be from the set of parseResults originally created when instantiating this Transformer. Received some unknown object.`,
+    );
+
+    return parseResult;
+  }
+
+  /**
+   * Given a parseResult, get the outer coordinates of some in-bounds coordinates
+   * within the template represented by the parseResult.
+   *
+   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {import('./internal-types.ts').InnerCoordinates} innerCoordinates
+   */
+  reverseInnerCoordinatesOf(parseResult, innerCoordinates) {
+    this.#assertParseResult(parseResult);
+    let coordinates = this.#getCoordinates(parseResult);
+
+    return reverseInnerCoordinates(coordinates, innerCoordinates);
   }
 
   /**
@@ -150,8 +182,9 @@ export class Transformer {
       let openingTag = this.#stringUtils.openingTag(parseResult);
       let closingTag = this.#stringUtils.closingTag(parseResult);
 
-      let originalEnd = originalStart + openingTag.length + originalLength + closingTag.length;
-      
+      let originalEnd =
+        originalStart + openingTag.length + originalLength + closingTag.length;
+
       result =
         result.slice(0, originalStart + offset) +
         openingTag +
