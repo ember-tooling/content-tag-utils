@@ -79,7 +79,9 @@ Properties / Methods:
 - `t.toString()` returns a string of the original file with all applied transforms
 - `t.parseResults` output from `content-tag` , but frozen / read-only - these are used as keys for other methods
 - `t.map()`
+- `t.each()`
 - `t.asyncMap()`
+- `t.asyncEach()`
 - `t.transformOneSync()`
 - `t.transformOne()`
 - `t.reverseInnerCoordinatesOf()` Given in-template coordinates, returns the coordinates in the context of the file
