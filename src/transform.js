@@ -10,7 +10,7 @@ import { Transformer } from "./transformer.js";
 export function transformSync(source, eachTemplate) {
   let t = new Transformer(source);
 
-  t.transformAllSync(eachTemplate);
+  t.map(eachTemplate);
 
   return t.toString();
 }
@@ -25,7 +25,7 @@ export function transformSync(source, eachTemplate) {
 export async function transform(source, eachTemplate) {
   let t = new Transformer(source);
 
-  await t.transformAll(eachTemplate);
+  await t.asyncMap(eachTemplate);
 
   return t.toString();
 }
