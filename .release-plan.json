@@ -1,21 +1,17 @@
 {
   "solution": {
     "content-tag-utils": {
-      "impact": "patch",
-      "oldVersion": "0.1.0",
-      "newVersion": "0.1.1",
+      "impact": "minor",
+      "oldVersion": "0.1.1",
+      "newVersion": "0.2.0",
       "constraints": [
         {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-01-29)\n\ncontent-tag-utils 0.1.1 (patch)\n\n#### :bug: Bug Fix\n* `content-tag-utils`\n  * [#4](https://github.com/NullVoxPopuli/content-tag-utils/pull/4) Fix issue with replacing contents with new contents containing unicode characters ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### :house: Internal\n* `content-tag-utils`\n  * [#4](https://github.com/NullVoxPopuli/content-tag-utils/pull/4) Fix issue with replacing contents with new contents containing unicode characters ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2025-02-02)\n\ncontent-tag-utils 0.2.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#6](https://github.com/NullVoxPopuli/content-tag-utils/pull/6) [Breaking]: Add each, asyncEach, map, asyncMap; remove transformAll, transformAllSync  ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
 }
