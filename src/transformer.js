@@ -71,27 +71,77 @@ export class Transformer {
   }
 
   /**
-   * Synchronously run a transform on all of the templates
+   * Synchronously iterate over all of the templates
    *
-   * @param {(original: string, coordinates: Coordinates) => string} perTemplateTransform
+   * @param {(original: string, coordinates: Coordinates) => unknown} perTemplate
    */
-  transformAllSync(perTemplateTransform) {
+  each(perTemplate) {
     for (let parseResult of this.#parseResults) {
-      this.transformOneSync(parseResult, perTemplateTransform);
+      this.#assertParseResult(parseResult);
+
+      let previous =
+        this.#transforms.get(parseResult) ??
+        this.#stringUtils.originalContentOf(parseResult);
+
+      let coordinates = this.#getCoordinates(parseResult);
+
+      perTemplate(previous, coordinates);
     }
   }
 
   /**
-   * Asynchronously run a transform on all of the templates
+   * Asynchronously iterate over all of the templates
    *
-   * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} perTemplateTransform
+   * @param {(original: string, coordinates: Coordinates) => unknown} perTemplate
    */
-  async transformAll(perTemplateTransform) {
+  async asyncEach(perTemplate) {
+    for (let parseResult of this.#parseResults) {
+      await this.#handleCallback(parseResult, perTemplate);
+    }
+  }
+
+  /**
+   * Map over all templates in the document, replacing their contents with the return string value from the provided callback;
+   *
+   * @param {(original: string, coordinates: Coordinates) => string} eachTemplate
+   */
+  map(eachTemplate) {
+    for (let parseResult of this.#parseResults) {
+      this.transformOneSync(parseResult, eachTemplate);
+    }
+  }
+
+  /**
+   * Map over all templates in the document, replacing their contents with the return string value from the provided async callback;
+   *
+   * @param {(original: string, coordinates: Coordinates) => Promise<string> | string} eachTemplate
+   */
+  async asyncMap(eachTemplate) {
     let promises = this.#parseResults.map((parseResult) =>
-      this.transformOne(parseResult, perTemplateTransform),
+      this.transformOne(parseResult, eachTemplate),
     );
 
     await Promise.all(promises);
+  }
+
+  /**
+   * Transform one template
+   *
+   * @template Return
+   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {(previous: string, coordinates: Coordinates) => Return} transform
+   * @return {Return}
+   */
+  #handleCallback(parseResult, transform) {
+    this.#assertParseResult(parseResult);
+
+    let previous =
+      this.#transforms.get(parseResult) ??
+      this.#stringUtils.originalContentOf(parseResult);
+
+    let coordinates = this.#getCoordinates(parseResult);
+
+    return transform(previous, coordinates);
   }
 
   /**
@@ -102,15 +152,7 @@ export class Transformer {
    * @return { void }
    */
   transformOneSync(parseResult, transform) {
-    this.#assertParseResult(parseResult);
-
-    let previous =
-      this.#transforms.get(parseResult) ??
-      this.#stringUtils.originalContentOf(parseResult);
-
-    let coordinates = this.#getCoordinates(parseResult);
-
-    let transformed = transform(previous, coordinates);
+    let transformed = this.#handleCallback(parseResult, transform);
     this.#transforms.set(parseResult, transformed);
   }
 
@@ -122,15 +164,7 @@ export class Transformer {
    * @return { Promise<void> }
    */
   async transformOne(parseResult, transform) {
-    this.#assertParseResult(parseResult);
-
-    let previous =
-      this.#transforms.get(parseResult) ??
-      this.#stringUtils.originalContentOf(parseResult);
-
-    let coordinates = this.#getCoordinates(parseResult);
-
-    let transformed = await transform(previous, coordinates);
+    let transformed = await this.#handleCallback(parseResult, transform);
     this.#transforms.set(parseResult, transformed);
   }
 

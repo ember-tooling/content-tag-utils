@@ -7,10 +7,10 @@ import {
   simpleTest,
 } from "./helpers.js";
 
-it("noop", () => {
+it("noop", async () => {
   let t = new Transformer(simpleTest);
 
-  t.transformAllSync((x) => x);
+  await t.asyncMap((x) => x);
 
   expect(t.toString()).toMatchInlineSnapshot(`
     "test('it renders', async (assert) => {
@@ -23,10 +23,10 @@ it("noop", () => {
   `);
 });
 
-it("small replace", () => {
+it("small replace", async () => {
   let t = new Transformer(simpleTest);
 
-  t.transformAllSync(() => "x");
+  await t.asyncMap(() => Promise.resolve("x"));
 
   expect(t.toString()).toMatchInlineSnapshot(`
     "test('it renders', async (assert) => {
@@ -35,10 +35,10 @@ it("small replace", () => {
   `);
 });
 
-it("multiple small replace", () => {
+it("multiple small replace", async () => {
   let t = new Transformer(multiTemplate);
 
-  t.transformAllSync(() => "x");
+  await t.asyncMap(() => Promise.resolve("x"));
 
   expect(t.toString()).toMatchInlineSnapshot(`
     "export const Name = <template>x</template>;
@@ -48,10 +48,10 @@ it("multiple small replace", () => {
   `);
 });
 
-it("class small replace", () => {
+it("class small replace", async () => {
   let t = new Transformer(inAClass);
 
-  t.transformAllSync(() => "x");
+  await t.asyncMap(() => Promise.resolve("x"));
 
   expect(t.toString()).toMatchInlineSnapshot(`
     "export class Foo {
@@ -61,10 +61,10 @@ it("class small replace", () => {
   `);
 });
 
-it("class w/ to small replace", () => {
+it("class w/ to small replace", async () => {
   let t = new Transformer(multiWithClass);
 
-  t.transformAllSync(() => "x");
+  await t.asyncMap(() => Promise.resolve("x"));
 
   expect(t.toString()).toMatchInlineSnapshot(`
     "export class Foo {
