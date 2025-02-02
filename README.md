@@ -56,15 +56,23 @@ export const Foo = <template>
 
 let t = new Transformer(file);
 
-// apply some transformations
-await t.transform((contents, coordinates => {
+// apply some transformations, with their coordinates
+await t.asyncMap((contents, coordinates => {
     /* ... */
     return 'new content';
 });
-t.transformSync((contents, coordinates) => {
+t.map((contents, coordinates) => {
     /* ... */
     return 'new content 2';
-})
+});
+
+// iterate over the templates, with their coordinates
+await t.asyncEach((contents, coordinates => {
+    /* ... */
+});
+t.each((contents, coordinates) => {
+    /* ... */
+});
 
 // get the output
 t.toString();
