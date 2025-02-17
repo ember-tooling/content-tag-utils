@@ -2,8 +2,8 @@
   "solution": {
     "content-tag-utils": {
       "impact": "minor",
-      "oldVersion": "0.1.1",
-      "newVersion": "0.2.0",
+      "oldVersion": "0.2.0",
+      "newVersion": "0.3.0",
       "constraints": [
         {
           "impact": "minor",
@@ -13,5 +13,5 @@
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-02-02)\n\ncontent-tag-utils 0.2.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#6](https://github.com/NullVoxPopuli/content-tag-utils/pull/6) [Breaking]: Add each, asyncEach, map, asyncMap; remove transformAll, transformAllSync  ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2025-02-17)\n\ncontent-tag-utils 0.3.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#9](https://github.com/NullVoxPopuli/content-tag-utils/pull/9) Add a way to get the parseResult ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
 }
