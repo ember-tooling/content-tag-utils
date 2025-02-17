@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-02-17)
+
+content-tag-utils 0.3.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#9](https://github.com/NullVoxPopuli/content-tag-utils/pull/9) Add a way to get the parseResult ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-02-02)
 
 content-tag-utils 0.2.0 (minor)
