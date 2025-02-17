@@ -1,5 +1,6 @@
 /**
  * @typedef { import('./public-types.ts').Coordinates} Coordinates
+ * @typedef { ReturnType<typeof parse>[0] } ParseResult;
  */
 import { reverseInnerCoordinates } from "./reverse-inner-coordinates.js";
 import { coordinatesOf } from "./coordinates-of.js";
@@ -36,9 +37,16 @@ export class Transformer {
   /**
    * Map of coordinates to pass to each callback
    *
-   * @type {Map<object, Coordinates>}
+   * @type {Map<ParseResult, Coordinates>}
    */
   #coordinates = new Map();
+
+  /**
+   * Map of coordinates to parse results
+   *
+   * @type {Map<Coordinates, ParseResult>}
+   */
+  #reverseCoordinates = new Map();
 
   /**
    * @param {string} source
@@ -57,6 +65,7 @@ export class Transformer {
     for (let parseResult of this.#parseResults) {
       let coordinates = coordinatesOf(this.#buffer, parseResult);
       this.#coordinates.set(parseResult, coordinates);
+      this.#reverseCoordinates.set(coordinates, parseResult);
     }
   }
 
@@ -68,6 +77,45 @@ export class Transformer {
    */
   get parseResults() {
     return this.#parseResults;
+  }
+
+  /**
+   * For a given set of coordinates, find the parseResult and return it
+   * You don't need to provide the whole original coordinates object.
+   * Though, you can!
+   *
+   * Alternatively, you can pass line/column or start or end
+   *
+   * @param {Partial<Coordinates> | Coordinates} coordinates
+   * @returns {ParseResult | undefined}
+   */
+  parseResultAt(coordinates) {
+    let candidates = [...this.#coordinates.values()];
+    let match = candidates.find((x) => x === coordinates);
+
+    if (!match && isPresent(coordinates.start)) {
+      match = candidates.find((x) => x.start === coordinates.start);
+    }
+
+    if (!match && isPresent(coordinates.end)) {
+      match = candidates.find((x) => x.end === coordinates.end);
+    }
+
+    if (
+      !match &&
+      isPresent(coordinates.line) &&
+      isPresent(coordinates.column)
+    ) {
+      match = candidates.find(
+        (x) => x.line === coordinates.line && x.column === coordinates.column,
+      );
+    }
+
+    if (match) {
+      return this.#reverseCoordinates.get(match);
+    }
+
+    return;
   }
 
   /**
@@ -128,7 +176,7 @@ export class Transformer {
    * Transform one template
    *
    * @template Return
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    * @param {(previous: string, coordinates: Coordinates) => Return} transform
    * @return {Return}
    */
@@ -147,7 +195,7 @@ export class Transformer {
   /**
    * Transform one template
    *
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    * @param {(previous: string, coordinates: Coordinates) => string} transform
    * @return { void }
    */
@@ -159,7 +207,7 @@ export class Transformer {
   /**
    * Transform one template
    *
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    * @param {(previous: string, coordinates: Coordinates) => Promise<string> | string} transform
    * @return { Promise<void> }
    */
@@ -169,7 +217,7 @@ export class Transformer {
   }
 
   /**
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    * @return {Coordinates}
    */
   #getCoordinates(parseResult) {
@@ -183,8 +231,8 @@ export class Transformer {
   }
 
   /**
-   * @param {ReturnType<typeof parse>[0]} parseResult
-   * @return {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
+   * @return {ParseResult} parseResult
    */
   #assertParseResult(parseResult) {
     assert(
@@ -199,7 +247,7 @@ export class Transformer {
    * Given a parseResult, get the outer coordinates of some in-bounds coordinates
    * within the template represented by the parseResult.
    *
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    * @param {import('./internal-types.ts').InnerCoordinates} innerCoordinates
    */
   reverseInnerCoordinatesOf(parseResult, innerCoordinates) {
@@ -272,14 +320,14 @@ export class ParseResultStringUtils {
   /**
    * Content before the opening <template>
    *
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    */
   contentBefore(parseResult) {
     return this.#buffer.slice(0, parseResult.range.start).toString();
   }
 
   /**
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    */
   originalContentOf(parseResult) {
     return this.#buffer
@@ -299,7 +347,7 @@ export class ParseResultStringUtils {
    * - macros?
    */
   /**
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    */
   openingTag(parseResult) {
     let openingTag = this.#buffer
@@ -309,7 +357,7 @@ export class ParseResultStringUtils {
   }
 
   /**
-   * @param {ReturnType<typeof parse>[0]} parseResult
+   * @param {ParseResult} parseResult
    */
   closingTag(parseResult) {
     let closingTag = this.#buffer
@@ -317,4 +365,13 @@ export class ParseResultStringUtils {
       .toString();
     return closingTag;
   }
+}
+
+/**
+ * @template Value
+ * @param {Value} x
+ * @returns {x is NonNullable<Value>}
+ */
+function isPresent(x) {
+  return x !== null && x !== undefined;
 }
