@@ -1,17 +1,17 @@
 {
   "solution": {
     "content-tag-utils": {
-      "impact": "minor",
-      "oldVersion": "0.2.0",
-      "newVersion": "0.3.0",
+      "impact": "patch",
+      "oldVersion": "0.3.0",
+      "newVersion": "0.3.1",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-02-17)\n\ncontent-tag-utils 0.3.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#9](https://github.com/NullVoxPopuli/content-tag-utils/pull/9) Add a way to get the parseResult ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2025-03-04)\n\ncontent-tag-utils 0.3.1 (patch)\n\n#### :bug: Bug Fix\n* `content-tag-utils`\n  * [#11](https://github.com/NullVoxPopuli/content-tag-utils/pull/11) Add license (MIT) ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
 }
