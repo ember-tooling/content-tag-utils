@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-03-04)
+
+content-tag-utils 0.3.1 (patch)
+
+#### :bug: Bug Fix
+* `content-tag-utils`
+  * [#11](https://github.com/NullVoxPopuli/content-tag-utils/pull/11) Add license (MIT) ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-02-17)
 
 content-tag-utils 0.3.0 (minor)
