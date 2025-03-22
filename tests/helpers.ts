@@ -8,6 +8,15 @@ export const simpleTest = [
   "});",
 ].join("\n");
 
+export const implicitDefault = {
+  satisfies: `
+import type { TOC } from '@ember/component/template-only';
+
+<template>hi there</template> satisfies TOC<{
+  /* ... */
+}>`,
+};
+
 export const unicodeSingle = [
   "export const Name = <template>",
   "  💩",
