@@ -1,6 +1,7 @@
 import { it, expect } from "vitest";
 import { Transformer } from "content-tag-utils";
 import {
+  implicitDefault,
   inAClass,
   multiTemplate,
   multiWithClass,
@@ -32,6 +33,21 @@ it("small replace", () => {
     "test('it renders', async (assert) => {
       await render(<template>x</template>);
     });"
+  `);
+});
+
+it("implicit default", () => {
+  let t = new Transformer(implicitDefault.satisfies);
+
+  t.map(() => "x");
+
+  expect(t.toString()).toMatchInlineSnapshot(`
+    "
+    import type { TOC } from '@ember/component/template-only';
+
+    <template>x</template> satisfies TOC<{
+      /* ... */
+    }>"
   `);
 });
 
