@@ -15,6 +15,7 @@ import type { TOC } from '@ember/component/template-only';
 <template>hi there</template> satisfies TOC<{
   /* ... */
 }>`,
+  js: `<template>hi</template>`,
 };
 
 export const unicodeSingle = [
