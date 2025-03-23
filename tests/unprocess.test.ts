@@ -39,7 +39,7 @@ expect.extend({
 
     return {
       pass: isSame,
-      message: () => `Expected \n${r.join('\n')} \n\nto be:\n ${e.join('\n')}`,
+      message: () => `Expected \n${r.join("\n")} \n\nto be:\n ${e.join("\n")}`,
     };
   },
 });
