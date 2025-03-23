@@ -10,6 +10,37 @@ export function unprocess(plain) {
   const templateFns = [];
   const root = j(plain);
 
+  // @ts-expect-error
+  function getTemplate(path) {
+    let result;
+
+    j(path).forEach((path) => {
+      if (!("name" in path.node.callee)) {
+        return;
+      }
+
+      let name = path.node.callee.name;
+
+      if (typeof name !== "string") {
+        return;
+      }
+
+      if (templateFns.includes(name)) {
+        let first = path.node.arguments[0];
+
+        if (!first || first?.type !== "TemplateLiteral") {
+          return;
+        }
+
+        let contents = first.quasis?.[0]?.value.raw;
+
+        result = contents;
+      }
+    });
+
+    return result;
+  }
+
   root
     .find(j.ImportDeclaration, {
       source: {
@@ -30,28 +61,26 @@ export function unprocess(plain) {
       }
     });
 
+  root.find(j["StaticBlock"]).forEach((staticPath) => {
+    // @ts-expect-error
+    j(staticPath)
+      .find(j.CallExpression)
+      .forEach((path) => {
+        let contents = getTemplate(path);
+
+        if (!contents) return;
+
+        // @ts-expect-error
+        j(staticPath).replaceWith(`<template>${contents}</template>`);
+      });
+  });
+
   root.find(j.CallExpression).forEach((path) => {
-    if (!("name" in path.node.callee)) {
-      return;
-    }
+    let contents = getTemplate(path);
 
-    let name = path.node.callee.name;
+    if (!contents) return;
 
-    if (typeof name !== "string") {
-      return;
-    }
-
-    if (templateFns.includes(name)) {
-      let first = path.node.arguments[0];
-
-      if (!first || first?.type !== "TemplateLiteral") {
-        return;
-      }
-
-      let contents = first.quasis?.[0]?.value.raw;
-
-      j(path).replaceWith(`<template>${contents}</template>`);
-    }
+    j(path).replaceWith(`<template>${contents}</template>`);
   });
 
   return root.toSource();

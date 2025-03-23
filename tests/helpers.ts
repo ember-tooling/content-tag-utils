@@ -78,3 +78,15 @@ export const multiWithClass = [
   "</template>;",
   "",
 ].join("\n");
+
+export const glimmer = [
+  "import Component from '@glimmer/component';",
+  "",
+  "export default class Demo extends Component {",
+  "  foo = 2;",
+  "",
+  "  <template>",
+  "    {{this.foo}}",
+  "  </template>",
+  "}",
+].join("\n");

@@ -1,6 +1,7 @@
 import { it, expect } from "vitest";
 import { unprocess } from "content-tag-utils/unprocess";
 import {
+  glimmer,
   implicitDefault,
   multiTemplate,
   unicodeMulti,
@@ -38,7 +39,7 @@ expect.extend({
 
     return {
       pass: isSame,
-      message: () => `Expected \n${r} \n\nto be:\n ${e}`,
+      message: () => `Expected \n${r.join('\n')} \n\nto be:\n ${e.join('\n')}`,
     };
   },
 });
@@ -92,4 +93,10 @@ it("multiTemplate", () => {
   let result = doUndo(multiTemplate);
 
   expect(result).toMatchCode(multiTemplate);
+});
+
+it("glimmer", () => {
+  let result = doUndo(glimmer);
+
+  expect(result).toMatchCode(glimmer);
 });
