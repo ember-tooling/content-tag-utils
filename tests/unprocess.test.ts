@@ -78,6 +78,7 @@ it("implicitDefault.js", async () => {
 it("unicodeSingle", () => {
   let result = doUndo(unicodeSingle);
 
+  // @ts-expect-error - how do types for this work
   expect(result).toMatchObject(unicodeSingle);
 });
 
