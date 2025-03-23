@@ -15,6 +15,7 @@ import type { TOC } from '@ember/component/template-only';
 <template>hi there</template> satisfies TOC<{
   /* ... */
 }>`,
+  js: `<template>hi</template>`,
 };
 
 export const unicodeSingle = [
@@ -76,4 +77,16 @@ export const multiWithClass = [
   "  </fieldset>",
   "</template>;",
   "",
+].join("\n");
+
+export const glimmer = [
+  "import Component from '@glimmer/component';",
+  "",
+  "export default class Demo extends Component {",
+  "  foo = 2;",
+  "",
+  "  <template>",
+  "    {{this.foo}}",
+  "  </template>",
+  "}",
 ].join("\n");

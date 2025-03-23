@@ -38,6 +38,12 @@ import {
 } from "content-tag-utils";
 ```
 
+and
+
+```js
+import { unprocess } from 'content-tag-utils/unprocess';
+```
+
 ### Transformer
 
 A general utility for working with content-tag, keeping tracked of each template as you apply transformations.
@@ -193,3 +199,32 @@ result:
     line: 3,
 }
 ```
+
+### unprocess 
+
+Converts a js or ts file that used to be gjs or gts back to gjs or gts.
+
+
+```js
+import { unprocess } from 'content-tag-utils/unprocess';
+
+let file = `
+import { template as template_fd9b2463e5f141cfb5666b64daa1f11a } from "@ember/template-compiler";
+import type { TOC } from '@ember/component/template-only';
+export default template_fd9b2463e5f141cfb5666b64daa1f11a(\`hi there\`, {
+        eval () {
+            return eval(arguments[0]);
+        }
+    }) satisfies TOC<{
+    }>;
+`;
+
+let result = unprocess(file);
+```
+
+result:
+
+```gjs
+export default <template>hi there</template>;
+```
+
