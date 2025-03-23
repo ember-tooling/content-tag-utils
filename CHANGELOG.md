@@ -1,5 +1,20 @@
 # Changelog
 
+## Release (2025-03-23)
+
+content-tag-utils 0.4.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#15](https://github.com/NullVoxPopuli/content-tag-utils/pull/15) Add unprocess ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### :house: Internal
+* `content-tag-utils`
+  * [#13](https://github.com/NullVoxPopuli/content-tag-utils/pull/13) Add implicit default export with satisfies ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-03-04)
 
 content-tag-utils 0.3.1 (patch)
