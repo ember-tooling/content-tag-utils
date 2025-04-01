@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-04-01)
+
+content-tag-utils 0.4.1 (patch)
+
+#### :house: Internal
+* `content-tag-utils`
+  * [#16](https://github.com/ember-tooling/content-tag-utils/pull/16) Update repo for next release ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-03-23)
 
 content-tag-utils 0.4.0 (minor)
