@@ -4,7 +4,7 @@
   "description": "utilities for working with content-tag: transforming, working with line/column information, etc",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NullVoxPopuli/content-tag-utils.git"
+    "url": "git+https://github.com/ember-tooling/content-tag-utils.git"
   },
   "type": "module",
   "license": "MIT",
