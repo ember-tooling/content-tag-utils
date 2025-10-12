@@ -268,7 +268,103 @@ export class Transformer {
   }
 
   /**
+   * Returns the whole gjs/gts document with the `<template>` contents replaced with placeholders of equivelent length.
+   *
+   * This utility is useful when stitching together ASTs
+   * from JS and Glimmer
+   *
+   * (Need to parse JS/TS first, then put in the Glimmer AST, eliminating the placeholder)
+   *
+   * The placeholder length includes the beginning and ending template tags.
+   *
+   * For classes:
+   * ```js
+   * class Demo {
+   *   <template>
+   *      hi there
+   *   </template>
+   * }
+   * ```
+   * becomes
+   * ```js
+   * class Demo {
+   *   [template(`
+   *      hi there
+   *   `] = null;
+   * }
+   * ```
+   *
+   * For consts:
+   * ```js
+   * const X = <template>
+   *   hi there
+   * </template>;
+   * ```
+   * becomes
+   * ```js
+   * const X = template_template(`
+   *   hi there
+   * `);
+   * ```
+   *
+   * NOTE
+   * - `<template>` is 10 characters
+   * - `</template>` is 11 characters
+   *
+   * So all the markup around the placeholder can only
+   * at max be 21 characters.
+   *
+   * The contents between the template tags are left for
+   * understanding / debugging purposes.
+   *
+   * @returns {string}
+   */
+  toStringWithTemplatePlaceholders() {
+    let result = this.#originalSource;
+    let offset = 0;
+
+    /**
+     * Apply recorded transforms
+     */
+    for (let parseResult of this.#parseResults) {
+      let transformed = this.#transforms.get(parseResult);
+      let originalContent = this.#stringUtils.originalContentOf(parseResult);
+      let originalLength = originalContent.length;
+
+      let content = transformed ? transformed.toString() : originalContent;
+
+      let originalBeforeContent = this.#stringUtils.contentBefore(parseResult);
+      let originalStart = originalBeforeContent.length;
+
+      // parseResult.type === 'expression'
+      let openingTag = "TEMPLATE_TEMPLATE(`";
+      let closingTag = "`)";
+
+      if (parseResult.type === "class-member") {
+        openingTag = "[_TEMPLATE_(`";
+        closingTag = "`)] = 0;";
+      }
+
+      let originalEnd =
+        originalStart + openingTag.length + originalLength + closingTag.length;
+
+      result =
+        result.slice(0, originalStart + offset) +
+        openingTag +
+        content +
+        closingTag +
+        result.slice(originalEnd + offset, result.length);
+
+      offset += content.length - originalLength;
+    }
+
+    return result;
+  }
+
+  /**
    * Returns the  whole gjs/gts document with the transforms written in to it
+   *
+   * @returns {string}
    */
   toString() {
     let result = this.#originalSource;
