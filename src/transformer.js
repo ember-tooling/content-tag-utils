@@ -329,7 +329,7 @@ export class Transformer {
    * @typedef {object} ToStringOptions
    * @property {boolean} [placeholders]
    *
-   * @params {ToStringOptions} [ options ]
+   * @param {ToStringOptions} [ options ]
    * @returns {string}
    */
   toString(options) {
