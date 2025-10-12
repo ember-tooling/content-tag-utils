@@ -91,6 +91,7 @@ t.toString();
 Properties / Methods:
 
 - `t.toString()` returns a string of the original file with all applied transforms
+  - `t.toString({ placeholders: true })` returns a string of original file, but as valid JS with placeholder markers - also applies transforms if anyone were done. 
 - `t.parseResults` output from `content-tag` , but frozen / read-only - these are used as keys for other methods
 - `t.map()`
 - `t.each()`

@@ -320,6 +320,20 @@ export class Transformer {
    * @returns {string}
    */
   toStringWithTemplatePlaceholders() {
+    return this.toString({ placeholders: true });
+  }
+
+  /**
+   * Returns the  whole gjs/gts document with the transforms written in to it
+   *
+   * @typedef {object} ToStringOptions
+   * @property {boolean} [placeholders]
+   *
+   * @param {ToStringOptions} [ options ]
+   * @returns {string}
+   */
+  toString(options) {
+    let usePlaceholders = options?.placeholders ?? false;
     let result = this.#originalSource;
     let offset = 0;
 
@@ -333,16 +347,29 @@ export class Transformer {
 
       let content = transformed ? transformed.toString() : originalContent;
 
+      if (!transformed && !usePlaceholders) {
+        continue;
+      }
+
       let originalBeforeContent = this.#stringUtils.contentBefore(parseResult);
       let originalStart = originalBeforeContent.length;
 
-      // parseResult.type === 'expression'
-      let openingTag = "TEMPLATE_TEMPLATE(`";
-      let closingTag = "`)";
+      let openingTag = this.#stringUtils.openingTag(parseResult);
+      let closingTag = this.#stringUtils.closingTag(parseResult);
 
-      if (parseResult.type === "class-member") {
-        openingTag = "[_TEMPLATE_(`";
-        closingTag = "`)] = 0;";
+      if (usePlaceholders) {
+        switch (parseResult.type) {
+          case "expression": {
+            openingTag = "TEMPLATE_TEMPLATE(`";
+            closingTag = "`)";
+            break;
+          }
+          case "class-member": {
+            openingTag = "[_TEMPLATE_(`";
+            closingTag = "`)] = 0;";
+            break;
+          }
+        }
       }
 
       let originalEnd =
@@ -356,49 +383,6 @@ export class Transformer {
         result.slice(originalEnd + offset, result.length);
 
       offset += content.length - originalLength;
-    }
-
-    return result;
-  }
-
-  /**
-   * Returns the  whole gjs/gts document with the transforms written in to it
-   *
-   * @returns {string}
-   */
-  toString() {
-    let result = this.#originalSource;
-    let offset = 0;
-
-    /**
-     * Apply recorded transforms
-     */
-    for (let parseResult of this.#parseResults) {
-      let transformed = this.#transforms.get(parseResult);
-      let originalContent = this.#stringUtils.originalContentOf(parseResult);
-      let originalLength = originalContent.length;
-
-      if (!transformed) {
-        continue;
-      }
-
-      let originalBeforeContent = this.#stringUtils.contentBefore(parseResult);
-      let originalStart = originalBeforeContent.length;
-
-      let openingTag = this.#stringUtils.openingTag(parseResult);
-      let closingTag = this.#stringUtils.closingTag(parseResult);
-
-      let originalEnd =
-        originalStart + openingTag.length + originalLength + closingTag.length;
-
-      result =
-        result.slice(0, originalStart + offset) +
-        openingTag +
-        transformed.toString() +
-        closingTag +
-        result.slice(originalEnd + offset, result.length);
-
-      offset += transformed.length - originalLength;
     }
 
     return result;
