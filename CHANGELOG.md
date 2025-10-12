@@ -2,6 +2,17 @@
 
 ## Release (2025-10-12)
 
+content-tag-utils 0.5.1 (patch)
+
+#### :bug: Bug Fix
+* `content-tag-utils`
+  * [#21](https://github.com/ember-tooling/content-tag-utils/pull/21) Add docs for new toString, allow toString to receive placeholders: true ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
+## Release (2025-10-12)
+
 content-tag-utils 0.5.0 (minor)
 
 #### :rocket: Enhancement
