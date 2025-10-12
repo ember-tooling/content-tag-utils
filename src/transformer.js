@@ -80,6 +80,16 @@ export class Transformer {
   }
 
   /**
+   * Utils for viewing the parts of a parseResult
+   * with in JS-character-byte range
+   *
+   * @type {ParseResultStringUtils}
+   */
+  get stringUtils() {
+    return this.#stringUtils;
+  }
+
+  /**
    * For a given set of coordinates, find the parseResult and return it
    * You don't need to provide the whole original coordinates object.
    * Though, you can!

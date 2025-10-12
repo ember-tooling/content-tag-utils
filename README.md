@@ -99,6 +99,11 @@ Properties / Methods:
 - `t.transformOneSync()`
 - `t.transformOne()`
 - `t.reverseInnerCoordinatesOf()` Given in-template coordinates, returns the coordinates in the context of the file
+- `t.stringUtils` Collection of utilities for working with parseResults 
+- `t.stringUtils.contentBefore(parseResult)` return the string contents before the passed parse result, before the opening `<template>`
+- `t.stringUtils.originalContentOf(parseResult)` returns the original content of the parseResult, prior to any transformations  
+- `t.stringUtils.openingTag(parseResult)` returns the opening `<template>` including any attributes are key-value pairs it may have on it 
+- `t.stringUtils.closingTag(parseResult)` returns the clasing `</template>` which is expected to always be `=== '</template'`  
 
 ### transform + transformSync
 
