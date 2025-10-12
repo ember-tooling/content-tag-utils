@@ -1,5 +1,17 @@
 # Changelog
 
+## Release (2025-10-12)
+
+content-tag-utils 0.5.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#20](https://github.com/ember-tooling/content-tag-utils/pull/20) Add placeholder version of toString() but with placeholders for AST replacing ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+  * [#18](https://github.com/ember-tooling/content-tag-utils/pull/18) Add and document the ParseResultStringUtils ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-04-01)
 
 content-tag-utils 0.4.1 (patch)
