@@ -1,17 +1,17 @@
 {
   "solution": {
     "content-tag-utils": {
-      "impact": "minor",
-      "oldVersion": "0.4.1",
-      "newVersion": "0.5.0",
+      "impact": "patch",
+      "oldVersion": "0.5.0",
+      "newVersion": "0.5.1",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-10-12)\n\ncontent-tag-utils 0.5.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#20](https://github.com/ember-tooling/content-tag-utils/pull/20) Add placeholder version of toString() but with placeholders for AST replacing ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n  * [#18](https://github.com/ember-tooling/content-tag-utils/pull/18) Add and document the ParseResultStringUtils ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2025-10-12)\n\ncontent-tag-utils 0.5.1 (patch)\n\n#### :bug: Bug Fix\n* `content-tag-utils`\n  * [#21](https://github.com/ember-tooling/content-tag-utils/pull/21) Add docs for new toString, allow toString to receive placeholders: true ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
 }
