@@ -50,11 +50,12 @@ export class Transformer {
 
   /**
    * @param {string} source
+   * @param {import('./public-types.ts').TransformerOptions} [options]
    */
-  constructor(source) {
+  constructor(source, options = {}) {
     this.#originalSource = source;
 
-    let parsed = parse(source);
+    let parsed = parse(source, options);
     let frozenParsed = parsed.map(Object.freeze);
 
     // SAFETY: readonly types are super annoying
