@@ -23,3 +23,15 @@ export interface Coordinates {
    */
   end: number;
 }
+
+export interface TransformerOptions {
+  /**
+   * Whether or not to use inline sourcemaps -- defaults to false.
+   */
+  inline_source_map?: boolean;
+
+  /**
+   * The filename representing the passed source string
+   */
+  filename?: string;
+}
