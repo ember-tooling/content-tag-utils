@@ -1,17 +1,17 @@
 {
   "solution": {
     "content-tag-utils": {
-      "impact": "patch",
-      "oldVersion": "0.5.0",
-      "newVersion": "0.5.1",
+      "impact": "minor",
+      "oldVersion": "0.5.1",
+      "newVersion": "0.6.0",
       "constraints": [
         {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-10-12)\n\ncontent-tag-utils 0.5.1 (patch)\n\n#### :bug: Bug Fix\n* `content-tag-utils`\n  * [#21](https://github.com/ember-tooling/content-tag-utils/pull/21) Add docs for new toString, allow toString to receive placeholders: true ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2025-10-13)\n\ncontent-tag-utils 0.6.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#23](https://github.com/ember-tooling/content-tag-utils/pull/23) Pass through options to parse ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
 }

@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-10-13)
+
+content-tag-utils 0.6.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#23](https://github.com/ember-tooling/content-tag-utils/pull/23) Pass through options to parse ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-10-12)
 
 content-tag-utils 0.5.1 (patch)
