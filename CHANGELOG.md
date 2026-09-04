@@ -1,5 +1,22 @@
 # Changelog
 
+## Release (2026-09-04)
+
+* content-tag-utils 0.7.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#32](https://github.com/ember-tooling/content-tag-utils/pull/32) Replace jscodeshift with ember-estree ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+  * [#29](https://github.com/ember-tooling/content-tag-utils/pull/29) Update content-tag to 4.2.0 ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+
+#### :house: Internal
+* `content-tag-utils`
+  * [#31](https://github.com/ember-tooling/content-tag-utils/pull/31) Update release-plan ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 2
+- @NullVoxPopuli's reduced-access machine account for AI usage ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-10-13)
 
 content-tag-utils 0.6.0 (minor)
