@@ -6,8 +6,8 @@
     "type": "git",
     "url": "git+https://github.com/ember-tooling/content-tag-utils.git"
   },
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
@@ -42,7 +42,7 @@
     "concurrently": "^9.1.2",
     "prettier": "^3.4.2",
     "publint": "^0.3.2",
-    "release-plan": "^0.11.0",
+    "release-plan": "^0.18.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.3"
   },
