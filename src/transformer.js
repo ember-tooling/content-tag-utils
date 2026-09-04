@@ -2,6 +2,7 @@
  * @typedef { import('./public-types.ts').Coordinates} Coordinates
  * @typedef { ReturnType<typeof parse>[0] } ParseResult;
  */
+import { stripBOM } from "./bom.js";
 import { reverseInnerCoordinates } from "./reverse-inner-coordinates.js";
 import { coordinatesOf } from "./coordinates-of.js";
 import { parse } from "./parse.js";
@@ -53,6 +54,8 @@ export class Transformer {
    * @param {import('./public-types.ts').TransformerOptions} [options]
    */
   constructor(source, options = {}) {
+    source = stripBOM(source);
+
     this.#originalSource = source;
 
     let parsed = parse(source, options);
@@ -405,7 +408,7 @@ export class ParseResultStringUtils {
    * @param {Buffer} buffer
    */
   constructor(buffer) {
-    this.#buffer = buffer;
+    this.#buffer = stripBOM(buffer);
   }
 
   /**
