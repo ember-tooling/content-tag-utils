@@ -70,16 +70,15 @@ it("implicitDefault.satisfies", async () => {
   expect(doUndo(implicitDefault.satisfies)).toMatchInlineSnapshot(`
     "import type { TOC } from '@ember/component/template-only';
     export default <template>hi there</template> satisfies TOC<{
-    }>;
-    "
+
+    }>;"
   `);
 });
 
 it("implicitDefault.js", async () => {
-  expect(doUndo(implicitDefault.js)).toMatchInlineSnapshot(`
-    "export default <template>hi</template>;
-    "
-  `);
+  expect(doUndo(implicitDefault.js)).toMatchInlineSnapshot(
+    `"export default <template>hi</template>;"`,
+  );
 });
 
 it("unicodeSingle", () => {

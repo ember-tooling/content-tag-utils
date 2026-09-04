@@ -1,87 +1,172 @@
-import jscodeshift from "jscodeshift";
+import { toTree, print } from "ember-estree";
+
+/**
+ * The subset of ESTree that unprocess reads.
+ * ember-estree types nodes with an index signature, which the strict
+ * tsconfig rejects for dotted property access.
+ *
+ * @typedef {object} Node
+ * @property {string} type
+ * @property {Node} [program]
+ * @property {Node[]} [body]
+ * @property {Node} [expression]
+ * @property {Node} [source]
+ * @property {unknown} [value]
+ * @property {Node[]} [specifiers]
+ * @property {Node} [imported]
+ * @property {Node} [local]
+ * @property {string} [name]
+ * @property {Node} [callee]
+ * @property {Node[]} [arguments]
+ * @property {Node[]} [quasis]
+ * @property {string} [raw]
+ */
+
+const TEMPLATE_COMPILER = "@ember/template-compiler";
 
 /**
  * @param {string} plain the processed JS or TS
  * @return {string}
  */
 export function unprocess(plain) {
-  const j = jscodeshift.withParser("ts");
-  /** @type {string[]} */
-  const templateFns = [];
-  const root = j(plain);
+  /** @type {Set<string>} */
+  const templateFns = new Set();
 
-  // @ts-expect-error
-  function getTemplate(path) {
-    let result;
+  const tree = /** @type {import('ember-estree').FileNode} */ (
+    toTree(plain, {
+      filePath: "unprocess.ts",
+      visitors: (outerAst) => {
+        const program = /** @type {Node} */ (
+          /** @type {Node} */ (outerAst).program
+        );
 
-    j(path).forEach((path) => {
-      if (!("name" in path.node.callee)) {
-        return;
-      }
+        program.body = (program.body ?? []).filter((node) => {
+          const localName = templateImportName(node);
 
-      let name = path.node.callee.name;
+          if (!localName) return true;
 
-      if (typeof name !== "string") {
-        return;
-      }
+          templateFns.add(localName);
+          return false;
+        });
 
-      if (templateFns.includes(name)) {
-        let first = path.node.arguments[0];
+        return {
+          StaticBlock(node, path) {
+            const body = /** @type {Node} */ (node).body ?? [];
+            const statement = body[0];
 
-        if (!first || first?.type !== "TemplateLiteral") {
-          return;
-        }
+            if (body.length !== 1) return;
+            if (statement?.type !== "ExpressionStatement") return;
+            if (!statement.expression) return;
 
-        let contents = first.quasis?.[0]?.value.raw;
+            const contents = templateContents(
+              statement.expression,
+              templateFns,
+            );
 
-        result = contents;
-      }
-    });
+            if (contents === undefined) return;
 
-    return result;
-  }
+            replaceInParent(path.parent, node, templateNode(contents));
+          },
+          CallExpression(node, path) {
+            const contents = templateContents(
+              /** @type {Node} */ (node),
+              templateFns,
+            );
 
-  root
-    .find(j.ImportDeclaration, {
-      source: {
-        value: "@ember/template-compiler",
+            if (contents === undefined) return;
+
+            replaceInParent(path.parent, node, templateNode(contents));
+          },
+        };
       },
     })
-    .forEach((path) => {
-      let template = path.node.specifiers?.find((x) => {
-        if ("imported" in x) {
-          return x.imported.name === "template";
-        }
+  );
+
+  if (tree.errors.length) {
+    const messages = tree.errors.map((error) => error.message).join("\n");
+
+    throw new SyntaxError(`unprocess: could not parse input:\n${messages}`);
+  }
+
+  return print(tree);
+}
+
+/**
+ * The local name of `template` when the node imports it from
+ * `@ember/template-compiler`.
+ *
+ * @param {Node} node
+ * @return {string | undefined}
+ */
+function templateImportName(node) {
+  if (node.type !== "ImportDeclaration") return;
+  if (node.source?.value !== TEMPLATE_COMPILER) return;
+
+  const specifier = (node.specifiers ?? []).find(
+    (x) => x.type === "ImportSpecifier" && x.imported?.name === "template",
+  );
+
+  return specifier?.local?.name;
+}
+
+/**
+ * The raw template source when the node is a `template(`...`)` call.
+ *
+ * @param {Node} node
+ * @param {Set<string>} templateFns
+ * @return {string | undefined}
+ */
+function templateContents(node, templateFns) {
+  if (node.type !== "CallExpression") return;
+  if (node.callee?.type !== "Identifier") return;
+  if (!templateFns.has(node.callee.name ?? "")) return;
+
+  const first = node.arguments?.[0];
+
+  if (first?.type !== "TemplateLiteral") return;
+
+  const value = /** @type {Node | undefined} */ (first.quasis?.[0]?.value);
+
+  return value?.raw;
+}
+
+/**
+ * A `<template>` node that prints its contents verbatim.
+ * The contents are not parsed as Glimmer, so the original text stays as is.
+ *
+ * @param {string} contents
+ * @return {import('ember-estree').ASTNode}
+ */
+function templateNode(contents) {
+  return {
+    type: "GlimmerTemplate",
+    body: [{ type: "GlimmerTextNode", chars: contents }],
+  };
+}
+
+/**
+ * @param {import('ember-estree').ASTNode | null} parent
+ * @param {import('ember-estree').ASTNode} target
+ * @param {import('ember-estree').ASTNode} replacement
+ */
+function replaceInParent(parent, target, replacement) {
+  if (!parent) return;
+
+  for (const key of Object.keys(parent)) {
+    const value = parent[key];
+
+    if (value === target) {
+      parent[key] = replacement;
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      const index = value.indexOf(target);
+
+      if (index >= 0) {
+        value[index] = replacement;
         return;
-      });
-
-      if (template?.local) {
-        templateFns.push(template.local.name);
-        j(path).remove();
       }
-    });
-
-  root.find(j["StaticBlock"]).forEach((staticPath) => {
-    // @ts-expect-error
-    j(staticPath)
-      .find(j.CallExpression)
-      .forEach((path) => {
-        let contents = getTemplate(path);
-
-        if (!contents) return;
-
-        // @ts-expect-error
-        j(staticPath).replaceWith(`<template>${contents}</template>`);
-      });
-  });
-
-  root.find(j.CallExpression).forEach((path) => {
-    let contents = getTemplate(path);
-
-    if (!contents) return;
-
-    j(path).replaceWith(`<template>${contents}</template>`);
-  });
-
-  return root.toSource();
+    }
+  }
 }
