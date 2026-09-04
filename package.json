@@ -30,7 +30,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "content-tag": "^3.1.2",
+    "content-tag": "^4.2.0",
     "jscodeshift": "^17.2.0"
   },
   "devDependencies": {

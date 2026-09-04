@@ -24,9 +24,9 @@ export function coordinatesOf(source, parsedResult) {
 
   let { contentRange: byteRange } = parsedResult;
   let inclusiveContent = buffer
-    .slice(byteRange.start, byteRange.end)
+    .slice(byteRange.startByte, byteRange.endByte)
     .toString();
-  let beforeContent = buffer.slice(0, byteRange.start).toString();
+  let beforeContent = buffer.slice(0, byteRange.startByte).toString();
   let before = beforeContent.length;
 
   let startCharIndex = before;
