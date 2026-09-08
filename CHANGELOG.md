@@ -2,6 +2,17 @@
 
 ## Release (2026-09-08)
 
+* content-tag-utils 0.7.2 (patch)
+
+#### :bug: Bug Fix
+* `content-tag-utils`
+  * [#35](https://github.com/ember-tooling/content-tag-utils/pull/35) Use subarray instead of the deprecated Buffer#slice ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+#### Committers: 1
+- Ryan Mark ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+## Release (2026-09-08)
+
 * content-tag-utils 0.7.1 (patch)
 
 #### :bug: Bug Fix
