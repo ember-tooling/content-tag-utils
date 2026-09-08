@@ -19,7 +19,7 @@ npm add content-tag-utils
 
 Using from source / github, via package.json:
 
-```js
+```json
 {
     "dependencies": {
         "content-tag-utils": "github:NullVoxPopuli/content-tag-utils"
@@ -46,7 +46,7 @@ import { unprocess } from 'content-tag-utils/unprocess';
 
 ### Transformer
 
-A general utility for working with content-tag, keeping tracked of each template as you apply transformations.
+A general utility for working with content-tag, keeping track of each template as you apply transformations.
 Transformations are recorded and then applied later when calling `.toString()`.
 
 For example:
@@ -63,7 +63,7 @@ export const Foo = <template>
 let t = new Transformer(file);
 
 // apply some transformations, with their coordinates
-await t.asyncMap((contents, coordinates => {
+await t.asyncMap((contents, coordinates) => {
     /* ... */
     return 'new content';
 });
@@ -73,7 +73,7 @@ t.map((contents, coordinates) => {
 });
 
 // iterate over the templates, with their coordinates
-await t.asyncEach((contents, coordinates => {
+await t.asyncEach((contents, coordinates) => {
     /* ... */
 });
 t.each((contents, coordinates) => {
@@ -84,15 +84,17 @@ t.each((contents, coordinates) => {
 t.toString();
 
 // can also do more transformations and get the output again later
-await t.transform(/* ... */ )
+await t.asyncMap(/* ... */);
 t.toString();
 ```
 
 Properties / Methods:
 
 - `t.toString()` returns a string of the original file with all applied transforms
-  - `t.toString({ placeholders: true })` returns a string of original file, but as valid JS with placeholder markers - also applies transforms if anyone were done. 
-- `t.parseResults` output from `content-tag` , but frozen / read-only - these are used as keys for other methods
+  - `t.toString({ placeholders: true })` returns a string of original file, but as valid JS with placeholder markers - also applies transforms if any were done. 
+- `t.toStringWithTemplatePlaceholders()` shorthand for `t.toString({ placeholders: true })`
+- `t.parseResults` output from `content-tag`, but frozen / read-only - these are used as keys for other methods
+- `t.parseResultAt(coordinates)` returns the parseResult at the passed coordinates, or `undefined` if there isn't one. The whole `Coordinates` object is not required - `{ start }`, `{ end }`, or `{ line, column }` are each enough to find a match
 - `t.map()`
 - `t.each()`
 - `t.asyncMap()`
@@ -103,14 +105,14 @@ Properties / Methods:
 - `t.stringUtils` Collection of utilities for working with parseResults 
 - `t.stringUtils.contentBefore(parseResult)` return the string contents before the passed parse result, before the opening `<template>`
 - `t.stringUtils.originalContentOf(parseResult)` returns the original content of the parseResult, prior to any transformations  
-- `t.stringUtils.openingTag(parseResult)` returns the opening `<template>` including any attributes are key-value pairs it may have on it 
-- `t.stringUtils.closingTag(parseResult)` returns the clasing `</template>` which is expected to always be `=== '</template'`  
+- `t.stringUtils.openingTag(parseResult)` returns the opening `<template>` including any attributes or key-value pairs it may have on it 
+- `t.stringUtils.closingTag(parseResult)` returns the closing `</template>` which is expected to always be `=== '</template>'`  
 
 ### transform + transformSync
 
 Transforms each template within a gjs or gts file in one go.
 
-These are convenience functions that wraps the `Transformer`.
+These are convenience functions that wrap the `Transformer`.
 
 The first argument to the callback will be the previous template-contents, and the second argument will be the coordinates of that template.
 
@@ -127,7 +129,7 @@ let result = await transform(file, (contents, coordinates) => `${contents}!`);
 let result2 = transformSync(file, (contents, coordinates) => `${contents}!`);
 ```
 
-result / result 2 ( a ! character is added right before the closing </template>):
+result / result 2 (a `!` character is added right before the closing `</template>`):
 
 ```gjs
 export const Foo = <template>
@@ -169,12 +171,12 @@ result (all values are character-indexes):
 }
 ```
 
-### reverseInnerCoordinates
+### reverseInnerCoordinatesOf
 
-Given inner coordinates scoped to a template, this function returns the coordinates in the overall source file.
+Given inner coordinates scoped to a template, this method returns the coordinates in the overall source file.
 
 ```js
-import { reverseInnerCoordinates } from 'content-tag-utils';
+import { Transformer } from "content-tag-utils";
 
 let file = `
 export const Foo = <template>
@@ -191,8 +193,8 @@ let innerCoordinates = {
     error: 'no capital letters!',
 };
 
-const templateInfos = extractTemplates(file);
-const result = reverseInnerCoordinates(templateInfos[0]!, innerCoordinates);
+let t = new Transformer(file);
+let result = t.reverseInnerCoordinatesOf(t.parseResults[0], innerCoordinates);
 ```
 
 result:
@@ -231,7 +233,10 @@ let result = unprocess(file);
 result:
 
 ```gjs
-export default <template>hi there</template>;
+import type { TOC } from '@ember/component/template-only';
+export default <template>hi there</template> satisfies TOC<{
+
+}>;
 ```
 
 
