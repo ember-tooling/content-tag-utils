@@ -1,4 +1,5 @@
 import { toTree, print } from "ember-estree";
+import { stripBOM } from "./bom.js";
 
 /**
  * The subset of ESTree that unprocess reads.
@@ -29,6 +30,9 @@ const TEMPLATE_COMPILER = "@ember/template-compiler";
  * @return {string}
  */
 export function unprocess(plain) {
+  // ember-estree drops it on the reprint too, but this keeps it ours.
+  plain = stripBOM(plain);
+
   /** @type {Set<string>} */
   const templateFns = new Set();
 

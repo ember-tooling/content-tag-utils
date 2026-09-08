@@ -90,3 +90,6 @@ export const glimmer = [
   "  </template>",
   "}",
 ].join("\n");
+
+/** A UTF-8 byte order mark. */
+export const BOM = "\uFEFF";

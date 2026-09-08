@@ -234,3 +234,8 @@ result:
 export default <template>hi there</template>;
 ```
 
+
+### Byte order marks
+
+A leading UTF-8 byte order mark is not treated as part of the source. All functions strip
+it before parsing, so returned documents and `Coordinates` are relative to the source without it.
