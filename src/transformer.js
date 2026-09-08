@@ -417,7 +417,7 @@ export class ParseResultStringUtils {
    * @param {ParseResult} parseResult
    */
   contentBefore(parseResult) {
-    return this.#buffer.slice(0, parseResult.range.startByte).toString();
+    return this.#buffer.subarray(0, parseResult.range.startByte).toString();
   }
 
   /**
@@ -425,7 +425,7 @@ export class ParseResultStringUtils {
    */
   originalContentOf(parseResult) {
     return this.#buffer
-      .slice(
+      .subarray(
         parseResult.contentRange.startByte,
         parseResult.contentRange.endByte,
       )
@@ -448,7 +448,10 @@ export class ParseResultStringUtils {
    */
   openingTag(parseResult) {
     let openingTag = this.#buffer
-      .slice(parseResult.startRange.startByte, parseResult.startRange.endByte)
+      .subarray(
+        parseResult.startRange.startByte,
+        parseResult.startRange.endByte,
+      )
       .toString();
     return openingTag;
   }
@@ -458,7 +461,7 @@ export class ParseResultStringUtils {
    */
   closingTag(parseResult) {
     let closingTag = this.#buffer
-      .slice(parseResult.endRange.startByte, parseResult.endRange.endByte)
+      .subarray(parseResult.endRange.startByte, parseResult.endRange.endByte)
       .toString();
     return closingTag;
   }
