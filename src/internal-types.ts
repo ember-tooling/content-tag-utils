@@ -7,11 +7,11 @@ export interface ContentRangeResult {
     /**
      * The start byte index of the content-range
      */
-    start: number;
+    startByte: number;
     /**
      * The end byte index of the content-range
      */
-    end: number;
+    endByte: number;
   };
 }
 

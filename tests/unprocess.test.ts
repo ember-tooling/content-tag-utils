@@ -11,8 +11,14 @@ import { Preprocessor } from "content-tag";
 
 let p = new Preprocessor();
 
+/**
+ * content-tag's process strips the whitespace around template contents,
+ * so a round-trip cannot restore newlines next to the template tags.
+ */
 function normalizeCode(input: string) {
   return input
+    .replaceAll("<template>", "\n<template>\n")
+    .replaceAll("</template>", "\n</template>\n")
     .split("\n")
     .map((x) => x.trim())
     .filter(Boolean);
@@ -64,23 +70,21 @@ it("implicitDefault.satisfies", async () => {
   expect(doUndo(implicitDefault.satisfies)).toMatchInlineSnapshot(`
     "import type { TOC } from '@ember/component/template-only';
     export default <template>hi there</template> satisfies TOC<{
-    }>;
-    "
+
+    }>;"
   `);
 });
 
 it("implicitDefault.js", async () => {
-  expect(doUndo(implicitDefault.js)).toMatchInlineSnapshot(`
-    "export default <template>hi</template>;
-    "
-  `);
+  expect(doUndo(implicitDefault.js)).toMatchInlineSnapshot(
+    `"export default <template>hi</template>;"`,
+  );
 });
 
 it("unicodeSingle", () => {
   let result = doUndo(unicodeSingle);
 
-  // @ts-expect-error - how do types for this work
-  expect(result).toMatchObject(unicodeSingle);
+  expect(result).toMatchCode(unicodeSingle);
 });
 
 it("unicodeMulti", () => {

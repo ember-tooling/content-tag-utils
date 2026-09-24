@@ -1,3 +1,5 @@
+import { stripBOM } from "./bom.js";
+
 /**
  * For a given source document (gjs or gts), and a single parseResult (one of the entries from the array returned from content-tag's parse), what is the line/column number of the first character
  * for that parseResult, and the columnOffset (useful for extracting templates to do work on and then put back, or giving pointers to errors present in the template).
@@ -22,11 +24,13 @@ export function coordinatesOf(source, parsedResult) {
     );
   }
 
+  buffer = stripBOM(buffer);
+
   let { contentRange: byteRange } = parsedResult;
   let inclusiveContent = buffer
-    .slice(byteRange.start, byteRange.end)
+    .subarray(byteRange.startByte, byteRange.endByte)
     .toString();
-  let beforeContent = buffer.slice(0, byteRange.start).toString();
+  let beforeContent = buffer.subarray(0, byteRange.startByte).toString();
   let before = beforeContent.length;
 
   let startCharIndex = before;

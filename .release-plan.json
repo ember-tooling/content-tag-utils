@@ -1,17 +1,18 @@
 {
   "solution": {
     "content-tag-utils": {
-      "impact": "minor",
-      "oldVersion": "0.5.1",
-      "newVersion": "0.6.0",
+      "impact": "patch",
+      "oldVersion": "0.7.1",
+      "newVersion": "0.7.2",
+      "tagName": "latest",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-10-13)\n\ncontent-tag-utils 0.6.0 (minor)\n\n#### :rocket: Enhancement\n* `content-tag-utils`\n  * [#23](https://github.com/ember-tooling/content-tag-utils/pull/23) Pass through options to parse ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2026-09-08)\n\n* content-tag-utils 0.7.2 (patch)\n\n#### :bug: Bug Fix\n* `content-tag-utils`\n  * [#35](https://github.com/ember-tooling/content-tag-utils/pull/35) Use subarray instead of the deprecated Buffer#slice ([@tylerturdenpants](https://github.com/tylerturdenpants))\n\n#### Committers: 1\n- Ryan Mark ([@tylerturdenpants](https://github.com/tylerturdenpants))\n"
 }

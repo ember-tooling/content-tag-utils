@@ -1,5 +1,44 @@
 # Changelog
 
+## Release (2026-09-08)
+
+* content-tag-utils 0.7.2 (patch)
+
+#### :bug: Bug Fix
+* `content-tag-utils`
+  * [#35](https://github.com/ember-tooling/content-tag-utils/pull/35) Use subarray instead of the deprecated Buffer#slice ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+#### Committers: 1
+- Ryan Mark ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+## Release (2026-09-08)
+
+* content-tag-utils 0.7.1 (patch)
+
+#### :bug: Bug Fix
+* `content-tag-utils`
+  * [#33](https://github.com/ember-tooling/content-tag-utils/pull/33) Strip a leading BOM from source ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+#### Committers: 1
+- Ryan Mark ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+## Release (2026-09-04)
+
+* content-tag-utils 0.7.0 (minor)
+
+#### :rocket: Enhancement
+* `content-tag-utils`
+  * [#32](https://github.com/ember-tooling/content-tag-utils/pull/32) Replace jscodeshift with ember-estree ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+  * [#29](https://github.com/ember-tooling/content-tag-utils/pull/29) Update content-tag to 4.2.0 ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+
+#### :house: Internal
+* `content-tag-utils`
+  * [#31](https://github.com/ember-tooling/content-tag-utils/pull/31) Update release-plan ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 2
+- @NullVoxPopuli's reduced-access machine account for AI usage ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-10-13)
 
 content-tag-utils 0.6.0 (minor)

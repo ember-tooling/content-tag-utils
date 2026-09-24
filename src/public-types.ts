@@ -15,11 +15,15 @@ export interface Coordinates {
   columnOffset: number;
 
   /**
-   * The character index of the start of the content in the original source
+   * The character index of the start of the content in the original source.
+   *
+   * if there is a leading BOM, it is stripped.
    */
   start: number;
   /**
    * The character index of the end of the content in the original source
+   *
+   * if there is a leading BOM, it is stripped.
    */
   end: number;
 }

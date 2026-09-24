@@ -1,13 +1,13 @@
 {
   "name": "content-tag-utils",
-  "version": "0.6.0",
+  "version": "0.7.2",
   "description": "utilities for working with content-tag: transforming, working with line/column information, etc",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ember-tooling/content-tag-utils.git"
   },
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
@@ -30,24 +30,23 @@
     "test": "vitest"
   },
   "dependencies": {
-    "content-tag": "^3.1.2",
-    "jscodeshift": "^17.2.0"
+    "content-tag": "^4.2.0",
+    "ember-estree": "^0.8.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/jscodeshift": "^0.12.0",
     "@types/node": "^22.10.7",
     "concurrently": "^9.1.2",
     "prettier": "^3.4.2",
     "publint": "^0.3.2",
-    "release-plan": "^0.11.0",
+    "release-plan": "^0.18.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.3"
   },
   "packageManager": "pnpm@10.0.0",
   "engines": {
-    "node": ">= 18"
+    "node": "^20.19.0 || >=22.12.0"
   }
 }
