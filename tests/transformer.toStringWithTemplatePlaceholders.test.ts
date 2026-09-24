@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { Transformer } from "content-tag-utils";
 
 import {
+  withService,
   implicitDefault,
   inAClass,
   multiTemplate,
@@ -109,6 +110,31 @@ it("multiWithClass", () => {
     "
   `);
   expect(multiWithClass.length).toEqual(result.length);
+});
+
+it("withService", () => {
+  let t = new Transformer(withService);
+
+  let result = t.toString({ placeholders: true });
+
+  expect(result).toMatchInlineSnapshot(`
+    "import { service } from '@ember/service';
+    import Component from '@glimmer/component';
+
+    export class ExampleComponent extends Component {
+      @service('store') store;
+      property = true;
+
+      ask() {
+        return 'hello world'
+      }
+
+      [_TEMPLATE_(\`
+        <h2>My Component</h2>
+      \`)] = 0;
+    }"
+  `);
+  expect(withService.length).toEqual(result.length);
 });
 
 describe("with transforms", () => {

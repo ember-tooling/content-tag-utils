@@ -25,6 +25,24 @@ export const unicodeSingle = [
   "",
 ].join("\n");
 
+export const withService = [
+  "import { service } from '@ember/service';",
+  "import Component from '@glimmer/component';",
+  "",
+  "export class ExampleComponent extends Component {",
+  "  @service('store') store;",
+  "  property = true;",
+  "",
+  "  ask() {",
+  "    return 'hello world'",
+  "  }",
+  "",
+  "  <template>",
+  "    <h2>My Component</h2>",
+  "  </template>",
+  "}",
+].join("\n");
+
 export const unicodeMulti = [
   "export const Run = <template>",
   "  r̸̳͙̟̳̺̩̎̍̎̚͠ǘ̷̟̀͂̽̿̅̆̈́n̷̜̣̙̫̦̳͇̞̣̻͑̊̂́̿̈́̕͜͜͠ͅ",
