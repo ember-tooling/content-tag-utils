@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2026-09-24)
+
+* content-tag-utils 0.7.3 (patch)
+
+#### :memo: Documentation
+* `content-tag-utils`
+  * [#37](https://github.com/ember-tooling/content-tag-utils/pull/37) Fix broken examples and typos in the README ([@tylerturdenpants](https://github.com/tylerturdenpants))
+
+#### :house: Internal
+* `content-tag-utils`
+  * [#25](https://github.com/ember-tooling/content-tag-utils/pull/25) Add more test ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 2
+- Ryan Mark ([@tylerturdenpants](https://github.com/tylerturdenpants))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2026-09-08)
 
 * content-tag-utils 0.7.2 (patch)
